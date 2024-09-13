@@ -1,2 +1,2 @@
-# osp
-O?S:P - An operating system project
+# O?S:P
+An operating system project
