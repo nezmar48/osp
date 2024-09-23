@@ -38,7 +38,7 @@
 00000000000i[USBCTL] Pluggable USB devices
 00000000000i[USBCTL]   floppy mouse tablet keypad keyboard hub disk cdrom
 00000000000i[USBCTL]   printer
-00000000000i[MEM0  ] allocated memory at 0x7b7464c00010. after alignment, vector=0x7b7464c01000
+00000000000i[MEM0  ] allocated memory at 0x7bf861400010. after alignment, vector=0x7bf861401000
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00020000, blocks=256
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/share/bochs/BIOS-bochs-latest')
@@ -50,7 +50,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Mon Sep 16 11:59:28 2024 (time0=1726480768)
+00000000000i[CMOS  ] Setting initial clock to: Mon Sep 23 10:30:39 2024 (time0=1727080239)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -78,8 +78,8 @@
 00000000000i[IOAPIC] IOAPIC enabled (base address = 0xfec00000)
 00000000000i[PLUGIN] init_dev of 'keyboard' plugin device by virtual method
 00000000000i[PLUGIN] init_dev of 'harddrv' plugin device by virtual method
-00000000000i[HD    ] CD on ata0-0: 'os.iso'
-00000000000i[CD1   ] load cdrom with path='os.iso'
+00000000000i[HD    ] CD on ata0-0: 'bin/os.iso'
+00000000000i[CD1   ] load cdrom with path='bin/os.iso'
 00000000000i[CD1   ] Opening image file as a cd.
 00000000000i[HD    ] Media present in CD-ROM drive
 00000000000i[HD    ] Capacity is 231 sectors (0.45 MB)
