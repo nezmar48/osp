@@ -1,5 +1,6 @@
 # O?S:P
 An operating system project
+Antoine Fraiteur & Matouš Topor
 
 ## Goals
 
