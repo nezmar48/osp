@@ -13,7 +13,7 @@ os.iso: kernel.elf
 	
 
 kernel.elf: loader.o
-	ld -T src/link.ld -melf_i386 bin/loader.o -o bin/kernel.elf
+	ld -T src/link.ld -melf_i386 bin/loader.o bin/kmain.o -o bin/kernel.elf 
 	cp bin/kernel.elf iso/boot/kernel.elf
 
 loader.o:
@@ -22,3 +22,7 @@ loader.o:
 run: os.iso
 	bochs -f src/bochsrc.txt -q
 	
+c:
+	gcc -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+             -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c \
+			 src/kmain.c -o bin/kmain.o
