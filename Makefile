@@ -1,3 +1,8 @@
+CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+    	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+# add cpp and assembly files here (no suffix)  
+OBJECTS = loader kmain
+
 os.iso: kernel.elf
 	genisoimage -R                          \
         	    -b boot/grub/stage2_elitro      \
@@ -10,19 +15,15 @@ os.iso: kernel.elf
             	-o bin/os.iso                       \
             	iso
 
-	
-
-kernel.elf: loader.o
-	ld -T src/link.ld -melf_i386 bin/loader.o bin/kmain.o -o bin/kernel.elf 
+kernel.elf: $(addsuffix .o, $(OBJECTS))
+	ld -T src/link.ld -melf_i386 $(addsuffix .o, $(addprefix bin/, $(OBJECTS))) -o bin/kernel.elf 
 	cp bin/kernel.elf iso/boot/kernel.elf
 
-loader.o:
-	nasm -f elf32 src/loader.s -o bin/loader.o
+%.o: src/%.s
+	nasm -f elf32 $< -o bin/$@
 
+%.o: src/%.cpp
+	g++ $(CFLAGS) $< -o bin/$@
+	
 run: os.iso
 	bochs -f src/bochsrc.txt -q
-	
-c:
-	g++ -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-             -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c \
-			 src/kmain.cpp -o bin/kmain.o
