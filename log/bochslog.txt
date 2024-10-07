@@ -38,7 +38,7 @@
 00000000000i[USBCTL] Pluggable USB devices
 00000000000i[USBCTL]   floppy mouse tablet keypad keyboard hub disk cdrom
 00000000000i[USBCTL]   printer
-00000000000i[MEM0  ] allocated memory at 0x72cbe8a00010. after alignment, vector=0x72cbe8a01000
+00000000000i[MEM0  ] allocated memory at 0x7d6b82600010. after alignment, vector=0x7d6b82601000
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00020000, blocks=256
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/share/bochs/BIOS-bochs-latest')
@@ -50,7 +50,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Mon Oct  7 09:17:22 2024 (time0=1728285442)
+00000000000i[CMOS  ] Setting initial clock to: Mon Oct  7 09:26:28 2024 (time0=1728285988)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -233,29 +233,29 @@
 00001509471i[BXVGA ] VBE known Display Interface b0c0
 00001509503i[BXVGA ] VBE known Display Interface b0c5
 00001512146i[VBIOS ] VBE Bios $Id: vbe.c 292 2021-06-03 12:24:22Z vruppert $
-00005166464i[BIOS  ] IDE time out
-00252960653i[BIOS  ] Booting from 07c0:0000
-00253056547i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
-00253060218i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
-00253063889i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
-00747918804i[      ] Ctrl-C detected in signal handler.
-00747918805i[      ] dbg: Quit
-00747918805i[CPU0  ] CPU is in protected mode (active)
-00747918805i[CPU0  ] CS.mode = 32 bit
-00747918805i[CPU0  ] SS.mode = 32 bit
-00747918805i[CPU0  ] EFER   = 0x00000000
-00747918805i[CPU0  ] | EAX=00000007  EBX=cafebabe  ECX=00000001  EDX=00000000
-00747918805i[CPU0  ] | ESP=00102000  EBP=00067ee0  ESI=0002cef0  EDI=0002cef1
-00747918805i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf AF PF cf
-00747918805i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00747918805i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
-00747918805i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00747918805i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00747918805i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00747918805i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00747918805i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-00747918805i[CPU0  ] | EIP=00100033 (00100033)
-00747918805i[CPU0  ] | CR0=0x60000011 CR2=0x00000000
-00747918805i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
-00747918805i[CMOS  ] Last time is 1728286189 (Mon Oct  7 09:29:49 2024)
-00747918805i[SIM   ] quit_sim called with exit code 0
+00005166579i[BIOS  ] IDE time out
+00138964328i[BIOS  ] Booting from 07c0:0000
+00139060222i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
+00139063893i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
+00139067564i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
+00248729364i[      ] Ctrl-C detected in signal handler.
+00248729365i[      ] dbg: Quit
+00248729365i[CPU0  ] CPU is in protected mode (active)
+00248729365i[CPU0  ] CS.mode = 32 bit
+00248729365i[CPU0  ] SS.mode = 32 bit
+00248729365i[CPU0  ] EFER   = 0x00000000
+00248729365i[CPU0  ] | EAX=cafebabe  EBX=0002cd80  ECX=00000001  EDX=00000000
+00248729365i[CPU0  ] | ESP=00102000  EBP=00067ee0  ESI=0002cef0  EDI=0002cef1
+00248729365i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf af pf cf
+00248729365i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00248729365i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
+00248729365i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00248729365i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00248729365i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00248729365i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00248729365i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+00248729365i[CPU0  ] | EIP=0010002e (0010002e)
+00248729365i[CPU0  ] | CR0=0x60000011 CR2=0x00000000
+00248729365i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
+00248729365i[CMOS  ] Last time is 1728286236 (Mon Oct  7 09:30:36 2024)
+00248729365i[SIM   ] quit_sim called with exit code 0

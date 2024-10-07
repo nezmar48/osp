@@ -23,6 +23,6 @@ run: os.iso
 	bochs -f src/bochsrc.txt -q
 	
 c:
-	gcc -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+	g++ -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
              -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c \
-			 src/kmain.c -o bin/kmain.o
+			 src/kmain.cpp -o bin/kmain.o
