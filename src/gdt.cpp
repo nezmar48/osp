@@ -1,7 +1,5 @@
 // Used for creating GDT segment descriptors in 64-bit integer form.
  
-#include <stdint.h>
- 
 // Each define here is for a specific flag in the descriptor.
 // Refer to the intel documentation for a description of what each one does.
 #define SEG_DESCTYPE(x)  ((x) << 0x04) // Descriptor type (0 for system, 1 for code/data)
@@ -46,19 +44,19 @@
                      SEG_PRIV(3)     | SEG_DATA_RDWR
  
 struct gdt_ptr {
-    unsigned int address;
     unsigned short size;
+    unsigned  long address;
 } __attribute__((packed));
 
 #define GDT_ENTRIES 5
-
-uint64_t gdt[GDT_ENTRIES]; // Null, Kernel Code, Kernel Data, User Code, User Data
+ 
+unsigned long long gdt[GDT_ENTRIES]; // Null, Kernel Code, Kernel Data, User Code, User Data
 gdt_ptr gdt_ptr;
 static unsigned short entries = 0;
 
-void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
+void create_descriptor(unsigned long base, unsigned long limit, unsigned short flag)
 {
-    uint64_t descriptor;
+    unsigned long long descriptor;
  
     // Create the high 32 bit segment
     descriptor  =  limit       & 0x000F0000;         // set limit bits 19:16
@@ -74,21 +72,22 @@ void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
     descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0 
     
     if(entries == GDT_ENTRIES) return;
-    gdt[entries++] = descriptor;
+    gdt[entries] = descriptor;
+    entries++;
 
 }
 
 
-extern "C" struct gdt_ptr * create_gdt(void)
+extern "C" unsigned long create_gdt(void)
 {
     create_descriptor(0, 0, 0);
     create_descriptor(0, 0xFFFFFFFF, (GDT_CODE_PL0));
     create_descriptor(0, 0xFFFFFFFF, (GDT_DATA_PL0));
     create_descriptor(0, 0xFFFFFFFF, (GDT_CODE_PL3));
     create_descriptor(0, 0xFFFFFFFF, (GDT_DATA_PL3));
-
+    
     gdt_ptr.address = (unsigned long)&gdt;
-    gdt_ptr.size = 8 * GDT_ENTRIES;
+    gdt_ptr.size = sizeof(gdt) - 1;
  
-    return &gdt_ptr;
+    return (unsigned long)&gdt_ptr;
 }
