@@ -19,6 +19,9 @@
     
 
     loader:   
+        extern create_gdt
+        call create_gdt
+        lgdt [eax]
         mov esp, kernel_stack + KERNEL_STACK_SIZE
         extern kmain
         call kmain
