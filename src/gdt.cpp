@@ -52,9 +52,8 @@ struct gdt_ptr {
  
 unsigned long long gdt[GDT_ENTRIES]; // Null, Kernel Code, Kernel Data, User Code, User Data
 gdt_ptr gdt_ptr;
-static unsigned short entries = 0;
 
-void create_descriptor(unsigned long base, unsigned long limit, unsigned short flag)
+void create_descriptor(int entry, unsigned long base, unsigned long limit, unsigned short flag)
 {
     unsigned long long descriptor;
  
@@ -71,20 +70,20 @@ void create_descriptor(unsigned long base, unsigned long limit, unsigned short f
     descriptor |= base  << 16;                       // set base bits 15:0
     descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0 
     
-    if(entries == GDT_ENTRIES) return;
-    gdt[entries] = descriptor;
-    entries++;
+    if(entry >= GDT_ENTRIES) return;
+
+    gdt[entry] = descriptor;
 
 }
 
 
 extern "C" unsigned long create_gdt(void)
 {
-    create_descriptor(0, 0, 0);
-    create_descriptor(0, 0xFFFFFFFF, (GDT_CODE_PL0));
-    create_descriptor(0, 0xFFFFFFFF, (GDT_DATA_PL0));
-    create_descriptor(0, 0xFFFFFFFF, (GDT_CODE_PL3));
-    create_descriptor(0, 0xFFFFFFFF, (GDT_DATA_PL3));
+    create_descriptor(0, 0, 0, 0);
+    create_descriptor(1, 0, 0xFFFFFFFF, (GDT_CODE_PL0));
+    create_descriptor(2, 0, 0xFFFFFFFF, (GDT_DATA_PL0));
+    create_descriptor(3, 0, 0xFFFFFFFF, (GDT_CODE_PL3));
+    create_descriptor(4, 0, 0xFFFFFFFF, (GDT_DATA_PL3));
     
     gdt_ptr.address = (unsigned long)&gdt;
     gdt_ptr.size = sizeof(gdt) - 1;

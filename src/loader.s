@@ -2,7 +2,7 @@ global loader                   ; the entry symbol for ELF
 
 MAGIC_NUMBER equ 0x1BADB002     ; define the magic number constant
 FLAGS        equ 0x0            ; multiboot flags
-CHECKSUM     equ -MAGIC_NUMBER  ; calculate the  
+CHECKSUM     equ - MAGIC_NUMBER  ; calculate the  
 
 KERNEL_STACK_SIZE equ 4096      
 
@@ -25,11 +25,10 @@ loader:
     call create_gdt
     lgdt [eax]
 
-    ; protected mode is already enabled DS is at 0x10
+    ; protected mode is already enabled, DS is at 0x10
 
     mov esp, kernel_stack + KERNEL_STACK_SIZE
     extern kmain
     call kmain
-    mov eax, 0xcafebabe
 .loop
     jmp .loop
