@@ -1,7 +1,7 @@
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
     	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
 # add cpp and assembly files here (no suffix)  
-OBJECTS = loader kmain
+OBJECTS = loader kmain io 
 
 os.iso: kernel.elf
 	genisoimage -R                          \
