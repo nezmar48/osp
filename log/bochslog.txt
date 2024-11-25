@@ -37,7 +37,7 @@
 00000000000i[IMG   ]   vmware4 vbox vpc vvfat
 00000000000i[NETCTL] Networking modules
 00000000000i[NETCTL]   null vnet linux slirp socket tuntap vde
-00000000000i[MEM0  ] allocated memory at 0x7f4949c00010. after alignment, vector=0x7f4949c01000, block_size = 128K
+00000000000i[MEM0  ] allocated memory at 0x7f6199c00010. after alignment, vector=0x7f6199c01000, block_size = 128K
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00020000, blocks=256
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/share/bochs/BIOS-bochs-latest')
@@ -49,7 +49,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Mon Nov  4  9:20:45   2024 tz=utc (time0=1730712045)
+00000000000i[CMOS  ] Setting initial clock to: Mon Nov 25  8:43:38   2024 tz=utc (time0=1732524218)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -220,31 +220,50 @@
 00000550156i[BXVGA ] VBE known Display Interface b0c0
 00000550188i[BXVGA ] VBE known Display Interface b0c5
 00000551605i[VBIOS ] VBE Bios ID: vbe.c 2024-03-03
-00004157024i[BIOS  ] IDE time out
-00652349123i[BIOS  ] Booting from 07c0:0000
-00652444459i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
-00652448130i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
-00652451801i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
-00653713940i[SER   ] com1: FIFO enabled
-02283580000p[SDL2  ] >>PANIC<< POWER button turned off.
-02283580000i[CPU0  ] CPU is in protected mode (active)
-02283580000i[CPU0  ] CS.mode = 32 bit
-02283580000i[CPU0  ] SS.mode = 32 bit
-02283580000i[CPU0  ] EFER   = 0x00000000
-02283580000i[CPU0  ] | EAX=cafebabe  EBX=0002cd80  ECX=00000008  EDX=00000028
-02283580000i[CPU0  ] | ESP=00103000  EBP=00067ee0  ESI=0002cef0  EDI=0002cef1
-02283580000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf af pf cf
-02283580000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-02283580000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
-02283580000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-02283580000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-02283580000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-02283580000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-02283580000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-02283580000i[CPU0  ] | EIP=0010044a (0010044a)
-02283580000i[CPU0  ] | CR0=0x60000011 CR2=0x00000000
-02283580000i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
-02283580000i[CPU0  ] 0x000000000010044a>> jmp .-2 (0x0010044a) : EBFE
-02283580000i[CMOS  ] Last time: 1730714328 tz=utc (Mon Nov  4  9:58:48   2024)
-02283580000i[      ] restoring default signal behavior
-02283580000i[SIM   ] quit_sim called with exit code 1
+00004157070i[BIOS  ] IDE time out
+00636929369i[BIOS  ] Booting from 07c0:0000
+00637024705i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
+00637028376i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
+00637032047i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
+00638292116i[SER   ] com1: FIFO enabled
+01278304000i[KBD   ] internal keyboard buffer full, ignoring scancode 0x4b
+01285107000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01285107000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xcb
+01400016000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01400016000i[KBD   ] internal keyboard buffer full, ignoring scancode 0x4d
+01409652000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01409652000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xcd
+01416976000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01416976000i[KBD   ] internal keyboard buffer full, ignoring scancode 0x4d
+01424187000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01424187000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xcd
+01430138000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01430138000i[KBD   ] internal keyboard buffer full, ignoring scancode 0x4d
+01437156000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01437156000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xcd
+01443912000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01443912000i[KBD   ] internal keyboard buffer full, ignoring scancode 0x4d
+01451258000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xe0
+01451258000i[KBD   ] internal keyboard buffer full, ignoring scancode 0xcd
+01629644000p[SDL2  ] >>PANIC<< POWER button turned off.
+01629644000i[CPU0  ] CPU is in protected mode (active)
+01629644000i[CPU0  ] CS.mode = 32 bit
+01629644000i[CPU0  ] SS.mode = 32 bit
+01629644000i[CPU0  ] EFER   = 0x00000000
+01629644000i[CPU0  ] | EAX=cafebabe  EBX=0002cd80  ECX=0000000a  EDX=000003d5
+01629644000i[CPU0  ] | ESP=00103000  EBP=00067ee0  ESI=0002cef0  EDI=0002cef1
+01629644000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf af pf cf
+01629644000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+01629644000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
+01629644000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+01629644000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+01629644000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+01629644000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+01629644000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+01629644000i[CPU0  ] | EIP=0010044a (0010044a)
+01629644000i[CPU0  ] | CR0=0x60000011 CR2=0x00000000
+01629644000i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
+01629644000i[CPU0  ] 0x000000000010044a>> jmp .-2 (0x0010044a) : EBFE
+01629644000i[CMOS  ] Last time: 1732525847 tz=utc (Mon Nov 25  9:10:47   2024)
+01629644000i[      ] restoring default signal behavior
+01629644000i[SIM   ] quit_sim called with exit code 1

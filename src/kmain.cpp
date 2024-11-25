@@ -1,3 +1,4 @@
+#include "frame_buffer.h"
 #include "serial_port.cpp"
 #include "frame_buffer.cpp"
 /** fb_write_cell:
@@ -11,15 +12,13 @@
      */
 
 extern "C" int kmain(){
+      serial_configure(SERIAL_COM1_BASE, Baud_115200);
 
   
       char buffer[] = "t'is wankers innit";
-	    fb_write(buffer,sizeof(buffer));
+	    fb_write(buffer,sizeof(buffer),LIGHT_GREEN,BLACK);
        
-      serial_configure(SERIAL_COM1_BASE, Baud_115200);
-      serial_write(SERIAL_COM1_BASE, buffer, sizeof(buffer));
-
-      fb_write_cell(0,'C',2,8);
+      
       return 0xcafebabe;
 }
 
