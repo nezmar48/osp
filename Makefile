@@ -1,11 +1,9 @@
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-    	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+    	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -ffreestanding
+
 # add cpp and assembly files here (no suffix)  
-<<<<<<< HEAD
-OBJECTS = loader kmain io 
-=======
-OBJECTS = loader kmain gdt
->>>>>>> 3da34d091c69dd9f488940e152ad9122a279fc87
+
+OBJECTS = loader kmain output/io output/frame_buffer output/serial_port gdt  
 
 os.iso: kernel.elf
 	genisoimage -R                          \
@@ -19,15 +17,24 @@ os.iso: kernel.elf
             	-o bin/os.iso                       \
             	iso
 
-kernel.elf: $(addsuffix .o, $(OBJECTS))
+kernel.elf: $(addsuffix .o, $(addprefix bin/, $(OBJECTS)))
 	ld -T src/link.ld -melf_i386 $(addsuffix .o, $(addprefix bin/, $(OBJECTS))) -o bin/kernel.elf 
 	cp bin/kernel.elf iso/boot/kernel.elf
 
-%.o: src/%.s
-	nasm -f elf32 $< -o bin/$@
+bin/%.o: src/%.s
+	@mkdir -p $(dir $@)
+	nasm -f elf32 $< -o $@
 
-%.o: src/%.cpp
-	g++ $(CFLAGS) $< -o bin/$@
+bin/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	g++ $(CFLAGS) $< -o $@
 	
 run: os.iso
 	bochs -f src/bochsrc.txt -q
+
+clean: 
+	rm -r bin/
+
+.PHONY: directories
+directories:
+	@mkdir -p $(addprefix bin/, $(dir $(OBJECTS)))
