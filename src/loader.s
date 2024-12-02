@@ -11,13 +11,12 @@ align 4
 kernel_stack:
     resb KERNEL_STACK_SIZE
 
-section .text:
+section .text
 align 4                         ; the code must be 4 byte aligned
     dd MAGIC_NUMBER
     dd FLAGS
     dd CHECKSUM 
     
-
 loader:   
     cli            ; disable interrupts
 
@@ -30,5 +29,5 @@ loader:
     mov esp, kernel_stack + KERNEL_STACK_SIZE
     extern kmain
     call kmain
-.loop
+.loop:
     jmp .loop
