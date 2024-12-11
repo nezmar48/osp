@@ -1,9 +1,12 @@
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-    	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -ffreestanding
+    	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -ffreestanding \
+		 -mno-sse -mno-sse2 -mno-mmx -mno-avx
 
 # add cpp and assembly files here (no suffix)  
 
-OBJECTS = loader kmain output/io output/frame_buffer output/serial_port gdt  
+OBJECTS = loader kmain gdt \
+		  output/io output/frame_buffer output/serial_port \
+		  interrupts/ex_handlers interrupts/idt interrupts/interrupts
 
 os.iso: kernel.elf
 	genisoimage -R                          \

@@ -24,6 +24,14 @@ loader:
     call create_gdt
     lgdt [eax]
 
+    extern idt_init
+    call idt_init
+    lidt [eax]
+
+    sti            ; enable interrupts
+
+    int 32 ; test interrupts
+
     ; protected mode is already enabled, DS is at 0x10
 
     mov esp, kernel_stack + KERNEL_STACK_SIZE
