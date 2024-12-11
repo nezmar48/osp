@@ -9,7 +9,7 @@ OBJECTS = loader kmain gdt \
 		  interrupts/ex_handlers interrupts/idt interrupts/interrupts
 
 os.iso: kernel.elf
-	genisoimage -R                          \
+	genisoimage -R                              \
         	    -b boot/grub/stage2_elitro      \
             	-no-emul-boot                   \
             	-boot-load-size 4               \
@@ -17,7 +17,7 @@ os.iso: kernel.elf
             	-input-charset utf8             \
             	-quiet                          \
             	-boot-info-table                \
-            	-o bin/os.iso                       \
+            	-o bin/os.iso                   \
             	iso
 
 kernel.elf: $(addsuffix .o, $(addprefix bin/, $(OBJECTS)))
@@ -32,11 +32,14 @@ bin/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
 	g++ $(CFLAGS) $< -o $@
 	
-run: os.iso
+bochs: os.iso 
+	mkdir -p log
 	bochs -f src/bochsrc.txt -q
 
 clean: 
 	rm -r bin/
+
+run: bochs clean
 
 .PHONY: directories
 directories:
