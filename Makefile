@@ -34,6 +34,7 @@ bin/%.o: src/%.cpp
 	
 bochs: os.iso 
 	mkdir -p log
+	rm -f log/com1.out
 	bochs -f src/bochsrc.txt -q
 
 clean: 

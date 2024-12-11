@@ -15,26 +15,26 @@ void fb_write_cell(unsigned int i, char c, unsigned char bg, unsigned char fg) {
 }
 
 int fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg){
-    unsigned int i;
-    for (i = 0; i < len; i++) {
-        if (i < 18) {
-            fb_write_cell(i * 2, *(buf + i), fg, bg);
-            fb_move_cursor(2);
-            }
-        else if (i < 45) {
-            if (i == 18) {
-                fb_move_cursor(80);
-        }
-            fb_write_cell(((i - 18) * 2) + 160, *(buf + i), fg, bg);
-            fb_move_cursor(2);
-        }
-        else {
-            if (i == 45) {
-                fb_move_cursor(160);
-            }
-            fb_write_cell(((i - 45) * 2) + 320, *(buf + i), fg, bg);
-            fb_move_cursor(2);
-        }
+unsigned int i;
+for (i = 0; i < len; i++) {
+    if (i < 18) {
+        fb_write_cell(i * 2, *(buf + i), fg, bg);
+        fb_move_cursor(2);
     }
-    return i;
+    else if (i < 45) {
+        if (i == 18) {
+            fb_move_cursor(80);
+        }
+        fb_write_cell(((i - 18) * 2) + 160, *(buf + i), fg, bg);
+        fb_move_cursor(2);
+    }
+    else {
+        if (i == 45) {
+            fb_move_cursor(160);
+        }
+        fb_write_cell(((i - 45) * 2) + 320, *(buf + i), fg, bg);
+        fb_move_cursor(2);
+    }
+}
+return i;
 }
