@@ -1,5 +1,4 @@
-#include "../output/frame_buffer.h"
-#include "../output/frame_buffer.h"
+#include "../output/serial_port.h"
 extern "C"
 void default_exception_handler(void);
 
@@ -9,7 +8,9 @@ void  default_exception_handler() {
 }
 
 extern "C" int test_exception_handler(){
-    char buffer[] = "interrupt";
-	    fb_write(buffer,sizeof(buffer),LIGHT_GREEN,BLACK);
+
+    serial_configure(SERIAL_COM1_BASE, Baud_115200);
+    char serial_buffer[] = "interrupts running \n";
+    serial_write(SERIAL_COM1_BASE, serial_buffer, sizeof(serial_buffer));
    return 32;
 }
