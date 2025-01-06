@@ -33,6 +33,9 @@ loader:
     int 32 ; test interrupts
 
     ; protected mode is already enabled, DS is at 0x10
+    
+    extern init_kernel_paging
+    call init_kernel_paging
 
     mov esp, kernel_stack + KERNEL_STACK_SIZE
     extern kmain

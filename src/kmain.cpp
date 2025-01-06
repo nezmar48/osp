@@ -4,6 +4,7 @@
 
 extern "C" int kmain() {
 
+
     //frame buffer test
     char buffer[] = "123456789012345";
 	    fb_write(buffer,sizeof(buffer),LIGHT_GREEN,BLACK);
