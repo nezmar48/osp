@@ -44,7 +44,7 @@ iso/modules/%: modules/%.cpp
 
 .PHONY: modules bochs clean clean_modules run 
 
-modules: $(addprefix iso/modules/, $(MODULES))
+modules: clean_modules $(addprefix iso/modules/, $(MODULES))
 
 bochs: os.iso 
 	mkdir -p log
