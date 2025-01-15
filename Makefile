@@ -4,7 +4,7 @@ CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 
 # add cpp and assembly files here (no suffix)  
 
-OBJECTS = loader kmain gdt \
+OBJECTS = loader kmain gdt multiboot\
 		  output/io output/frame_buffer output/serial_port \
 		  interrupts/ex_handlers interrupts/idt interrupts/interrupts
 
