@@ -14,9 +14,12 @@ void fb_write_cell(unsigned int i, char c, unsigned char bg, unsigned char fg) {
 	fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
 
+unsigned int last_position = 0;
+
 void fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg) {
     for (unsigned int i = 0; i < len; i++) {
-        fb_write_cell(i * 2, *(buf + i), fg, bg);
+        fb_write_cell(i * 2 + last_position, *(buf + i), fg, bg);
         fb_move_cursor(2);
     }
+    last_position += len*2;
 }
