@@ -3,9 +3,9 @@
 #include "output/frame_buffer.h"
 #include "multiboot.h"
 #include "stdlib/string.cpp"
+#include "process.cpp"
 
 extern "C" int kmain(multiboot_info_t &multiboot_info) {
-
 
     //frame buffer test
     char buffer[] = "frame buffer running";
@@ -17,22 +17,17 @@ extern "C" int kmain(multiboot_info_t &multiboot_info) {
     serial_configure(SERIAL_COM1_BASE, Baud_115200);
     char serial_buffer[] = "serial running";
     serial_write(SERIAL_COM1_BASE, serial_buffer, sizeof(serial_buffer));
+
+    //call program
     
-    multiboot_module_t  program = *((multiboot_module_t *)multiboot_info.mods_addr);
+    multiboot_module_t * program_mod = (multiboot_module_t *)multiboot_info.mods_addr;
 
-    fb_write_hex_32(program.mod_start);
-
-    typedef void (*call_module_t)(void);
-    call_module_t program_f = (call_module_t)program.mod_start;
-
-    program_f();
+    fb_write_hex_32(program_mod->mod_start);
     
+    process program(program_mod);
+
+    program.call();    
+
     return 0xcafebabe;
 }
 
-
-int main() {
-
-
-    return 0;
-}
