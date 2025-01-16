@@ -7,9 +7,11 @@ isr_stub_%+%1:
         popa
     %else
         pusha
-        call default_exception_handler ; Default handler if no argument
+        ;call default_exception_handler ; Default handler if no argument
         mov eax, 0xDEADBEEF
         mov ebx, %1
+        cli
+        hlt
         popa
     %endif
     iret
@@ -24,15 +26,17 @@ isr_stub_%+%1:
         popa
     %else
         pusha
-        call default_exception_handler ; Default handler if no argument
         mov eax, 0xDEADBEEF
         mov ebx, %1
+        cli
+        hlt
         popa
     %endif
     iret
 %endmacro
 
 extern default_exception_handler
+extern page_fault_handler
 isr_no_err_stub 0
 isr_no_err_stub 1
 isr_no_err_stub 2
@@ -47,7 +51,7 @@ isr_err_stub    10
 isr_err_stub    11
 isr_err_stub    12
 isr_err_stub    13
-isr_err_stub    14
+isr_err_stub    14, page_fault_handler
 isr_no_err_stub 15
 isr_no_err_stub 16
 isr_err_stub    17

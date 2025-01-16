@@ -8,3 +8,5 @@
     clock:           sync=realtime, time0=local
     cpu:             count=1, ips=1000000c
     com1: enabled=1, mode=file, dev=log/com1.out
+    magic_break: enabled=1
+    debug: action=ignore
