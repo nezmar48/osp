@@ -1,9 +1,7 @@
 #include "output/frame_buffer.h"
-#include "output/serial_port.h"
-#include "output/frame_buffer.h"
 #include "multiboot.h"
-#include "stdlib/string.cpp"
-#include "process.cpp"
+#include "std.h"
+#include "process.h"
 
 extern "C" int kmain(multiboot_info_t &multiboot_info) {
 
@@ -14,19 +12,27 @@ extern "C" int kmain(multiboot_info_t &multiboot_info) {
      
     //serial test
     
-    serial_configure(SERIAL_COM1_BASE, Baud_115200);
-    char serial_buffer[] = "serial running";
-    serial_write(SERIAL_COM1_BASE, serial_buffer, sizeof(serial_buffer));
+    char serial_buffer[] = "serial running\0";
+    log(serial_buffer);
 
     //call program
-    
+   
     multiboot_module_t * program_mod = (multiboot_module_t *)multiboot_info.mods_addr;
 
     fb_write_hex_32(program_mod->mod_start);
     
     process program(program_mod);
+    unsigned long test_args[] = {2, 3};
 
-    program.call();    
+    program.args.args = test_args;
+    program.args.size = 2;
+
+    unsigned long result = program.call();  
+
+    char proces_result_message[] = "function operands sucess:";
+    log(proces_result_message);
+    log((test_args[0] + test_args[1]) == result);
+
 
     return 0xcafebabe;
 }

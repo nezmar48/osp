@@ -92,7 +92,7 @@ int serial_write(unsigned short com, char *buf, unsigned int len);
  *  @param port Serial port to which data has to be written
  * @param byte_data 8 bit data
  */
-void serial_write_byte(unsigned short port, char byteData);
+void serial_write_byte(unsigned short com, char byteData);
 
 /** serial_configure:
  *  Configure serial port
@@ -100,6 +100,6 @@ void serial_write_byte(unsigned short port, char byteData);
  *  @param port Serial port which needs to be configured
  * @param baudRate rate at which data needs to be transmitted
  */
-void serial_configure(unsigned short port, unsigned short baudRate);
-
+void serial_configure(unsigned short com, unsigned short baudRate);
+static int configured_com;
 #endif /* INCLUDE_IO_H */

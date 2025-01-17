@@ -1,33 +1,27 @@
-#include "multiboot.h"
+#include "std.h"
+#include "process.h"
 
-class process {
-    public: 
-        process(multiboot_module_t *module);
-        void * adress;
+extern "C" unsigned long call_process(void * adress, unsigned long * args, unsigned long size);
 
-        struct {
-            int size = 0;
-            unsigned long * args;
-        }args;
-
-        multiboot_module_t module;
-        unsigned long call(void);
-};
+int process::ids = 0;
 
 process::process(multiboot_module_t *module) {
+    this->id = ids++; 
     this->module = *module;
     this->adress = (void *)module->mod_start;
 }
 
 unsigned long process::call(void) {
-    unsigned long result;
-    asm volatile("pusha");
-    for (int i = 0; i < this->args.size; i++)
-        asm volatile("push %0" : : "r" (this->args.args[1]));
-    asm volatile(
-    "call %1"
-    : "=a" (result)
-    : "r" (this->adress)
-    );
-    return 0;
+    
+    char entering_message[] = "entering process \0";
+    log(entering_message);
+    log(this->id);
+    
+    unsigned long result = call_process(this->adress, this->args.args, this->args.size);
+
+    char exit_message[] = "exiting process \0";
+    log(exit_message);
+    log(this->id);
+
+    return result;
 }

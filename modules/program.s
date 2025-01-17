@@ -1,4 +1,12 @@
 bits 32
-mov eax, 0xDEADBEEF
 
-jmp $
+push ebp
+mov ebp, esp
+
+mov eax, [esp + 8]
+add eax, [esp + 12]
+
+mov esp, ebp
+pop ebp
+
+ret

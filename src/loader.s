@@ -34,5 +34,7 @@ loader:
 
     extern kmain
     call kmain
-.loop:
-    jmp .loop
+
+    cli 
+    hlt
+    mov eax, 0x0b00b1e5
