@@ -5,6 +5,8 @@
 
 extern "C" int kmain(multiboot_info_t &multiboot_info) {
 
+
+    asm ("cli; hlt; mov $0xfa, %eax"); //table not initilazed
     //frame buffer test
     char buffer[] = "frame buffer running";
 

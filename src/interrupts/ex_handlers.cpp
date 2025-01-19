@@ -12,3 +12,8 @@ extern "C" void  page_fault_handler() {
      __asm__ volatile ("cli; hlt"); // Completely hangs the computer
     // __builtin_unreachable(); 
 }
+
+extern "C" void  unimplemented_interrupt() {
+    char message[] = "int 8 recived";
+    log(message);
+}

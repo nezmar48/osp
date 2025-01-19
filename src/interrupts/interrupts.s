@@ -26,6 +26,7 @@ isr_stub_%+%1:
     iret
     %endmacro
 
+extern unimplemented_interrupt
 isr_no_err_stub 0
 isr_no_err_stub 1
 isr_no_err_stub 2
@@ -34,7 +35,7 @@ isr_no_err_stub 4
 isr_no_err_stub 5
 isr_no_err_stub 6
 isr_no_err_stub 7
-isr_err_stub    8
+isr_err_stub    8, unimplemented_interrupt
 isr_no_err_stub 9
 isr_err_stub    10
 isr_err_stub    11
