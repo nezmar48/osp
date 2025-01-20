@@ -14,21 +14,14 @@ extern "C" void init_kernel_paging() {
     unsigned short flags = READ_WRITE | PRESENT; 
 
     kernel_page_directory[0] = ((unsigned long)first_page_table) | flags;
-    // log((unsigned long)kernel_page_directory);
-    // log((unsigned long)first_page_table);
+
     // identity map first 4 Mb of memory
     for(unsigned int i = 0; i < 1024; i++) {
         get_page(kernel_page_directory, i * 0x1000, flags); //present read, write
+        if (first_page_table[i] != ((i * 0x1000) | 3))
+            asm ("cli; hlt; mov %0, %%eax" : : "r" (i));
     }
-    unsigned long not_identity_mapped = 0;
-    for(unsigned int i = 0; i < 1024; i++)
-    {
-         not_identity_mapped += first_page_table[i] != ((i * 0x1000) | 3); // attributes: supervisor level, read/write, present.
-    }
-    if (not_identity_mapped != 0)
-        asm ("cli; hlt; mov $0xfc, %eax");
-    
-    // asm ("cli; hlt; mov $0xfb, %eax");
+
     loadPageDirectory(kernel_page_directory);
     enablePaging();
 }

@@ -16,6 +16,7 @@ unsigned long process::call(void) {
     char entering_message[] = "entering process \0";
     log(entering_message);
     log(this->id);
+
     
     unsigned long result = call_process((void *)(this->module.mod_start + 0x1000), this->args.args, this->args.size);
 
