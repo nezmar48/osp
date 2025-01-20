@@ -1,14 +1,13 @@
 #include "paging.h"
 #include "../std.h"
-extern "C" void loadPageDirectory(unsigned long*);
-extern "C" void enablePaging();
 
 page_directory_t kernel_page_directory;
 page_table_t first_page_table;
+page_table_t second_page_table; 
 
 extern "C" void init_kernel_paging() {
 
-    init_page_directory(kernel_page_directory);
+    init_page_directory(kernel_page_directory, READ_WRITE);
     init_memory_map();
 
     unsigned short flags = READ_WRITE | PRESENT; 
@@ -21,7 +20,12 @@ extern "C" void init_kernel_paging() {
         if (first_page_table[i] != ((i * 0x1000) | 3))
             asm ("cli; hlt; mov %0, %%eax" : : "r" (i));
     }
+    init_page_table(second_page_table, READ_WRITE);
 
-    loadPageDirectory(kernel_page_directory);
-    enablePaging();
+    load_page_directory(kernel_page_directory);
+    enable_paging();
+}
+
+page_directory_t* get_kernel_page_dir() {
+    return &kernel_page_directory;
 }

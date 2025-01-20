@@ -1,6 +1,6 @@
 #include "paging.h"
 #include "../std.h"
-void init_page_directory(page_directory_t page_directory) {
+void init_page_directory(page_directory_t page_directory, unsigned short flags) {
      
     //set each entry to not present
     int i;
@@ -10,7 +10,22 @@ void init_page_directory(page_directory_t page_directory) {
         //   Supervisor: Only kernel-mode can access them
         //   Write Enabled: It can be both read from and written to
         //   Not Present: The page table is not present
-        page_directory[i] = 0x00000002;
+        page_directory[i] = flags;
+    }
+
+}
+
+void init_page_table(page_table_t page_table, unsigned short flags) {
+     
+    //set each entry to not present
+    int i;
+    for(i = 0; i < 1024; i++)
+    {
+        // This sets the following flags to the pages:
+        //   Supervisor: Only kernel-mode can access them
+        //   Write Enabled: It can be both read from and written to
+        //   Not Present: The page table is not present
+        page_table[i] = flags;
     }
 
 }
@@ -20,15 +35,15 @@ unsigned long get_page(page_directory_t directory, unsigned long virtual_address
     unsigned long adress = get_free_page();
     if (adress == 1)
         asm ("cli; hlt; mov $0xff, %eax"); //memory full
-    
-    unsigned long directory_index = virtual_address / 0x400000;
-    unsigned long * table = (unsigned long *)(directory[directory_index] & 0xfffff000);
+    page_index index = get_index(virtual_address); 
+    unsigned long * table = get_table(directory, index.dir);
     if (table == 0)
         asm ("cli; hlt; mov $0xfd, %eax"); //table not initilazed
-    unsigned long table_index = (virtual_address & 0x3ff000)/0x1000;
-    table[table_index] = adress | flags; // present flags overwriten!!
+    table[index.table] = adress | flags; // present flags overwriten!!
     return adress;
 }
+
+unsigned long last_free = 0;
 unsigned long memory_map[1024 * 32];
 void init_memory_map() {
     for (int i = 0; i < 1024 * 32; i++)
@@ -36,7 +51,7 @@ void init_memory_map() {
 }
 unsigned long get_free_page(){
     unsigned long j = 1;
-    unsigned long i = 0;
+    unsigned long i = last_free;
     while ((j & memory_map[i]) != 0) {
         j <<= 1;
         if (j == 0) {
@@ -46,7 +61,28 @@ unsigned long get_free_page(){
                 return 1;
         }
     }
+    last_free = i;
     memory_map[i] = memory_map[i] | j;
     return ((i * 32) + log_two(j)) * 0x1000;
 
+}
+page_index get_index(unsigned long virtual_address) {
+    page_index index;
+    index.dir = virtual_address / 0x400000;
+    index.table =  (virtual_address & 0x3ff000)/0x1000;
+    return index;
+
+}
+unsigned long * get_table(page_directory_t directory, int index) {
+    return (unsigned long *)(directory[index] & 0xfffff000);
+}
+
+void switch_page(unsigned long src_add, page_directory_t src_dir, unsigned long dst_add, page_directory_t dst_dir) {
+    page_index src_index = get_index(src_add);
+    page_index dst_index = get_index(dst_add);
+
+    unsigned long * src_table = get_table(src_dir, src_index.dir);
+    unsigned long * dst_table = get_table(dst_dir, dst_index.dir);
+
+    dst_table[dst_index.table] = src_table[src_index.table];
 }

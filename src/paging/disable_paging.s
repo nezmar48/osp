@@ -1,8 +1,8 @@
 section .text
-global enable_paging
+global disable_paging
 
-enable_paging:
+disable_paging:
     mov eax, cr0      
-    or eax, 0x80000000
+    xor eax, 0x80000000
     mov cr0, eax     
     ret           

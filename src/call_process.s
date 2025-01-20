@@ -17,6 +17,8 @@ call_process:
     jmp .loop
 
 .call:
+    cli
+    hlt
     call ebx
     mov esp, ebp
     pop ebp 
