@@ -1,7 +1,7 @@
 section .text
-global loadPageDirectory
+global load_page_directory
 
-loadPageDirectory:
+load_page_directory:
     mov eax, [esp + 4] 
     mov cr3, eax      
     ret            

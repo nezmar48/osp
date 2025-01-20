@@ -3,7 +3,7 @@ global loader_func_end
 
 align 4
 loader_func:
-    mov ebp, [eip + 0x1000] 
+    lea ebp, [rel loader_func_end + 0x1000]
 
     mov ebx, [esp + 4]      ; Load entry label address
     mov ecx, [esp + 8]     ; Load args array pointer

@@ -3,6 +3,8 @@
 #include "std.h"
 #include "process.h"
 
+page_table_t process_page_table;
+page_directory_t process_page_dir;
 extern "C" int kmain(multiboot_info_t &multiboot_info) {
 
     //frame buffer test
@@ -21,7 +23,8 @@ extern "C" int kmain(multiboot_info_t &multiboot_info) {
 
     fb_write_hex_32(program_mod->mod_start);
     
-    process program(program_mod);
+    process program(program_mod, process_page_dir, process_page_table);
+
     unsigned long test_args[] = {2, 3};
 
     program.args.args = test_args;
