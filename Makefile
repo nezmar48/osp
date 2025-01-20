@@ -8,7 +8,7 @@ OBJECTS = 	loader kmain gdt multiboot process call_process\
 		  	output/io output/frame_buffer output/serial_port \
 		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
 		  	paging/enable_paging paging/init_kernel_paging paging/load_page_directory paging/paging \
-			stdlib/string stdlib/memcopy
+			stdlib/string stdlib/memcopy stdlib/math
 
 MODULES = program
 

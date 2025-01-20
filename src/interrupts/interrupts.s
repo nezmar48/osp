@@ -1,8 +1,10 @@
 %macro isr_err_stub 1-2
 isr_stub_%+%1:
     %if %0 > 1              ; Check if a second argument was provided
+        pusha
         extern %2
         call %2             ; Call the provided handler
+        popa
     %else
         mov eax, 0xDEADBEEF
         mov ebx, %1
@@ -15,8 +17,10 @@ isr_stub_%+%1:
 %macro isr_no_err_stub 1-2
 isr_stub_%+%1:
     %if %0 > 1              ; Check if a second argument was provided
+        pusha
         extern %2
         call %2             ; Call the provided handler
+        popa
     %else
         mov eax, 0xDEADBEEF
         mov ebx, %1
@@ -34,7 +38,7 @@ isr_no_err_stub 4
 isr_no_err_stub 5
 isr_no_err_stub 6
 isr_no_err_stub 7
-isr_err_stub    8
+isr_err_stub    8, unimplemented_interrupt
 isr_no_err_stub 9
 isr_err_stub    10
 isr_err_stub    11
