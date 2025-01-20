@@ -79,3 +79,12 @@ void switch_page(unsigned long src_add, page_directory_t &src_dir, unsigned long
     unsigned long * dst_table = get_table(dst_dir, dst_index.dir);
     dst_table[dst_index.table] = src_table[src_index.table];
 }
+
+void clear_flags(page_directory_t &directory, page_index index) {
+    page_table_t * table = (page_table_t *)get_table(directory, index.dir);
+    *table[index.table] &= 0xfffff000;
+}
+
+void clear_flags(page_table_t &table, int index) {
+    table[index] &= 0xfffff000;
+}

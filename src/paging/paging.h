@@ -22,12 +22,14 @@ unsigned long get_free_page();
 unsigned long * get_table(page_directory_t &directory, int index);
 page_index get_index(unsigned long virtual_address);
 void switch_page(unsigned long src_add, page_directory_t &src_dir, unsigned long dst_add, page_directory_t &dst_dir);
+void clear_flags(page_directory_t &directory, page_index index);
+void clear_flags(page_table_t &table, int index);
 
 extern "C" void load_page_directory(page_directory_t &directory);
 extern "C" void enable_paging();
 extern "C" void disable_paging();
 
-extern "C" unsigned long loader_func(unsigned long adress, unsigned long * args, unsigned long size);
+extern "C" unsigned long loader_func(page_directory_t * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);
 extern "C" void loader_func_end(void);
 
 

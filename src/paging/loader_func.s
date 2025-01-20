@@ -5,9 +5,12 @@ align 4
 loader_func:
     lea ebp, [rel loader_func_end + 0x1000]
 
-    mov ebx, [esp + 4]      ; Load entry label address
-    mov ecx, [esp + 8]     ; Load args array pointer
-    mov edx, [esp + 12]     ; Load size (number of arguments)
+    mov eax, [esp + 4]      ; page dir 
+    mov ebx, [esp + 8]      ; Load entry label address
+    mov ecx, [esp + 12]     ; Load args array pointer
+    mov edx, [esp + 16]     ; Load size (number of arguments)
+
+    mov cr3, eax
 
     mov eax, edx
 .loop:
@@ -18,9 +21,5 @@ loader_func:
     jmp .loop
 
 .call:
-    mov eax, cr0      
-    or eax, 0x80000000
-    mov cr0, eax    
-
     call ebx
 loader_func_end:

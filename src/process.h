@@ -4,11 +4,11 @@
 #include "paging//paging.h"
 #include "multiboot.h"
 
-extern "C" unsigned long call_process(void * address, unsigned long * args, unsigned long size);
+typedef unsigned long (*loaded_loader_process)(page_directory_t * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);
 class process {
     public: 
         process(multiboot_module_t *module, page_directory_t &directory, page_table_t &table);
-        void * address;
+        unsigned long address;
 
         struct {
             int size = 0;
