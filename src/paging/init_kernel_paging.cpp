@@ -1,9 +1,7 @@
 #include "paging.h"
 #include "../std.h"
-
 page_directory_t kernel_page_directory;
 page_table_t first_page_table;
-page_table_t second_page_table; 
 
 extern "C" void init_kernel_paging() {
 
@@ -20,7 +18,6 @@ extern "C" void init_kernel_paging() {
         if (first_page_table[i] != ((i * 0x1000) | 3))
             asm ("cli; hlt; mov %0, %%eax" : : "r" (i));
     }
-    init_page_table(second_page_table, READ_WRITE);
 
     load_page_directory(kernel_page_directory);
     enable_paging();

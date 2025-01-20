@@ -1,5 +1,5 @@
 section .text
-global enable_paging
+global enable_paging 
 
 enable_paging:
     mov eax, cr0      
