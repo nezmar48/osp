@@ -17,10 +17,12 @@ process::process(multiboot_module_t *module, page_directory_t &directory, page_t
 
 unsigned long process::call(void) {
     load();
-    log(1);
     switch_on();
-    log((unsigned long)(*(this->page_dir))[0]);
-    log((unsigned long)(*(this->page_table))[0]);
+
+    for (int i = 0; i < 1024; i++)
+        log((*(this->page_dir))[i]);
+    for (int i = 0; i < 1024; i++)
+        log((*(this->page_table))[i]);
 
     char entering_message[] = "entering process \0";
     log(entering_message);
@@ -36,6 +38,7 @@ unsigned long process::call(void) {
     return result;
 }
 void process::load() {
+
     unsigned short flags = READ_WRITE | PRESENT;
     page_directory_t * kernel_page_directory = get_kernel_page_dir();
 
@@ -58,10 +61,10 @@ void process::switch_on() {
 
     switch_page(physical_start, *kernel_page_directory, 0, *this->page_dir); 
     clear_flags(*this->page_table, 0);
-    *(this->page_table)[0] |= PRESENT | READ_WRITE | USER; 
+    (*(this->page_table))[0] |= PRESENT | READ_WRITE | USER; 
 
-    switch_page(physical_start, *kernel_page_directory, 0x1000, *this->page_dir);
+    switch_page(physical_start + 0x1000, *kernel_page_directory, 0x1000, *this->page_dir);
     clear_flags(*this->page_table, 1);
-    *(this->page_table)[1] |= PRESENT | READ_WRITE | USER; 
+    (*(this->page_table))[1] |= PRESENT | READ_WRITE | USER; 
     
 }
