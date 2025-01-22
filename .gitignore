@@ -1,2 +1,4 @@
 bin/
 log/
+iso/boot/kernel.elf
+iso/modules/*
