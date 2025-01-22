@@ -1,5 +1,4 @@
-#include "../output/frame_buffer.h"
-#include "../output/serial_port.h"
+#include "../output.h"
 #include "../std.h"
 
 void hex_to_char_array_32(unsigned long hexValue, char result[]) {

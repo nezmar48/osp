@@ -1,4 +1,4 @@
-#include "paging.h"
+#include "../paging.h"
 #include "../std.h"
 
 void init_page_directory(page_directory_t &page_directory, unsigned short flags) {

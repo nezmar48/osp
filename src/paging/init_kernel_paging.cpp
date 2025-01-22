@@ -1,4 +1,4 @@
-#include "paging.h"
+#include "../paging.h"
 #include "../std.h"
 page_directory_t kernel_page_directory;
 page_table_t first_page_table;

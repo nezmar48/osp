@@ -1,4 +1,4 @@
-#include "multiboot.h"
+#include "../multiboot.h"
 
 const multiboot_uint32_t MULTIBOOT_FLAGS = MULTIBOOT_PAGE_ALIGN;
 

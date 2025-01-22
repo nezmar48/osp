@@ -9,7 +9,7 @@ extern "C" int test_exception_handler(){
 extern "C" void  page_fault_handler() {
     int test = 0xcafebabe;
     test++;
-     __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+     __asm__ volatile ("cli; hlt; mov $0xdeadc0de, %eax"); // Completely hangs the computer
     // __builtin_unreachable(); 
 }
 

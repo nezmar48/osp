@@ -4,7 +4,9 @@ CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 
 # add cpp and assembly files here (no suffix)  
 
-OBJECTS = 	loader kmain gdt multiboot process call_process\
+OBJECTS = 	loader kmain \
+			other/gdt other/multiboot \
+			process/process process/call_process\
 		  	output/io output/frame_buffer output/serial_port \
 		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
 		  	paging/enable_paging paging/init_kernel_paging paging/load_page_directory paging/paging paging/disable_paging paging/loader_func\

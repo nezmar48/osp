@@ -1,6 +1,6 @@
-#include "std.h"
-#include "process.h"
-#include "paging/paging.h"
+#include "../std.h"
+#include "../process.h"
+#include "../paging.h"
 
 
 int process::ids = 0;

@@ -1,7 +1,7 @@
 #ifndef PROCESS
 #define PROCESS
 
-#include "paging//paging.h"
+#include "paging.h"
 #include "multiboot.h"
 
 typedef unsigned long (*loaded_loader_process)(page_directory_t * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);

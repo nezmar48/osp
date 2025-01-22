@@ -1,11 +1,32 @@
-#include "output/frame_buffer.h"
+#include "gdt.h"
+#include "output.h"
 #include "multiboot.h"
 #include "std.h"
 #include "process.h"
+#include "interrupts.h"
+
 
 page_table_t process_page_table;
 page_directory_t process_page_dir;
 extern "C" int kmain(multiboot_info_t &multiboot_info) {
+
+    unsigned long gdt = create_gdt();
+    asm volatile (
+        "lgdt (%0);"
+        :
+        : "r" (gdt)
+        : "memory"
+    );
+
+    unsigned long idt = idt_init();
+    asm volatile (
+        "lidt (%0);"
+        "sti;"
+        "int $32;"
+        :
+        : "r" (idt)
+        : "memory"
+    );
 
     //frame buffer test
     char buffer[] = "frame buffer running";
@@ -23,19 +44,18 @@ extern "C" int kmain(multiboot_info_t &multiboot_info) {
 
     fb_write_hex_32(program_mod->mod_start);
     
-    process program(program_mod, process_page_dir, process_page_table);
+    // process program(program_mod, process_page_dir, process_page_table);
 
-    unsigned long test_args[] = {2, 3};
+    // unsigned long test_args[] = {2, 3};
 
-    program.args.args = test_args;
-    program.args.size = 2;
+    // program.args.args = test_args;
+    // program.args.size = 2;
 
-    unsigned long result = program.call();  
+    // unsigned long result = program.call();  
 
     char proces_result_message[] = "function operands sucess:";
     log(proces_result_message);
-    log((test_args[0] + test_args[1]) == result);
-
+    // log((test_args[0] + test_args[1]) == result);
 
     return 0xcafebabe;
 }

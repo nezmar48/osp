@@ -1,4 +1,4 @@
-#include "serial_port.h"
+#include "../output.h"
 
 void serial_configure_baud_rate(unsigned short com, unsigned short divisor) {
   /* Tell the serial com to first expect the highest 8 bits, then the lowest
@@ -55,6 +55,8 @@ void serial_write_byte(unsigned short com, char byteData) {
 
     outb(com, byteData);
 }
+
+int configured_com;
 
 void serial_configure(unsigned short com, unsigned short baudRate) {
 

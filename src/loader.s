@@ -21,7 +21,9 @@ section .text
     
 loader:
 
-    mov ebp, kernel_stack + KERNEL_STACK_SIZE   ; set up stack
+    cli         ; disable interrupts
+
+    mov ebp, (kernel_stack - 0xC0000000) + KERNEL_STACK_SIZE   ; set up stack
     mov esp, ebp
 
     push ebx    ; push adress of multiboot strucure
@@ -56,29 +58,18 @@ loader:
     or  eax, 0x80000000
     mov cr0, eax
 
+    add ebp, 0xC0000000
+    add esp, 0xC0000000
+
     lea eax, [higher_half]
     jmp eax
 
 higher_half:
 
-
-    cli         ; disable interrupts
-
-
-    extern create_gdt
-    call create_gdt
-    lgdt [eax]
-
-    extern idt_init
-    call idt_init
-    lidt [eax]
-    sti            ; enable interrupts
-    int 32 ; test interrupts
-
-    ; protected mode is already enabled, DS is at 0x10
+    ; ; protected mode is already enabled, DS is at 0x10
     
-    extern init_kernel_paging
-    call init_kernel_paging
+    ; extern init_kernel_paging
+    ; call init_kernel_paging
 
     extern kmain
     call kmain
