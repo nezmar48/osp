@@ -18,7 +18,6 @@ loader_func:
     je .call
     dec eax
     push dword [ecx + eax * 4]
-    jmp .loop
 
 .call:
     call ebx
