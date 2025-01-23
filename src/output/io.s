@@ -16,6 +16,6 @@ global inb
 ; stack: [esp + 4] The address of the I/O port
 ;        [esp    ] The return address
 inb:
-    mov dx, [esp + 4]       ; move the address of the I/O port to the dx register
-    in  al, dx              ; read a byte from the I/O port and store it in the al register
+    mov edx, [esp + 4]       ; move the address of the I/O port to the dx register
+    in  al, edx              ; read a byte from the I/O port and store it in the al register
     ret                     ; return the read byte

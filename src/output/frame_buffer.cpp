@@ -2,7 +2,7 @@
 
 static char *fb = (char *)0x000B8000;
 
-void fb_move_cursor(unsigned short pos) {
+void fb_move_cursor(unsigned long pos) {
 	outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
 	outb(FB_DATA_PORT, ((pos >> 8) & 0x00FF));
 	outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);

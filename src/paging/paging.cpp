@@ -1,6 +1,12 @@
 #include "../paging.h"
 #include "../std.h"
+void init_kernel_paging() {
 
+    init_memory_map();
+
+    kernel_page_directory[0] = 0;
+
+}
 void init_page_directory(page_directory_t &page_directory, unsigned short flags) {
      
     int i;
@@ -41,6 +47,9 @@ unsigned long last_free = 0;
 void init_memory_map() {
     for (int i = 0; i < 1024 * 32; i++)
         memory_map[i] = 0;
+
+    for (int i = 0; i < 1024 / 32; i++) //kernel owns always firs 4 MB
+        memory_map[i] --;
 }
 
 unsigned long get_free_page(){

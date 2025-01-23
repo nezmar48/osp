@@ -1,11 +1,11 @@
 #ifndef INCLUDE_FRAMEBUFFER_H
 #define INCLUDE_FRAMEBUFFER_H
-
+#include "paging.h"
 #pragma once
 
 /* The I/O ports */
-#define FB_COMMAND_PORT 0x3D4
-#define FB_DATA_PORT 0x3D5
+#define FB_COMMAND_PORT 0x3D4 + KERNEL_OFFSET
+#define FB_DATA_PORT 0x3D5 + KERNEL_OFFSET
 
 /* The I/O port commands */
 #define FB_HIGH_BYTE_COMMAND 14
@@ -34,7 +34,7 @@
  *
  *  @param pos The new position of the cursor
  */
-void fb_move_cursor(unsigned short pos);
+void fb_move_cursor(unsigned long pos);
 
 /** fb_write_cell:
  *  Writes a character with the given foreground and background to position i
@@ -67,7 +67,7 @@ void fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg);
 *  @param port The I/O port to send the data to
 *  @param data The data to send to the I/O port
 */
-extern "C" void outb(unsigned short port, unsigned char data);
+extern "C" void outb(unsigned long port, unsigned char data);
 
 /** inb:
 *  Read a byte from an I/O port.
@@ -75,7 +75,7 @@ extern "C" void outb(unsigned short port, unsigned char data);
 *  @param  port The address of the I/O port
 *  @return      The read byte
 */
-extern "C" unsigned char inb(unsigned short port);
+extern "C" unsigned char inb(unsigned long port);
 
 #endif /* INCLUDE_IO_H */
 
@@ -91,7 +91,7 @@ extern "C" unsigned char inb(unsigned short port);
  * order, but they start at different values.
  */
 
-#define SERIAL_COM1_BASE 0x3F8 /* COM1 base port */
+#define SERIAL_COM1_BASE 0x3F8 + KERNEL_OFFSET/* COM1 base port */
 
 #define SERIAL_DATA_PORT(base) (base)
 #define SERIAL_FIFO_COMMAND_PORT(base) (base + 2)
@@ -118,7 +118,7 @@ enum BaudRate { Baud_115200 = 1, Baud_57600, Baud_19200, Baud_9600 };
  *  @param com      The COM port to configure
  *  @param divisor  The divisor
  */
-void serial_configure_baud_rate(unsigned short com, unsigned short divisor);
+void serial_configure_baud_rate(unsigned long com, unsigned long divisor);
 
 /** serial_configure_line:
  *  Configures the line of the given serial port. The port is set to have a
@@ -127,7 +127,7 @@ void serial_configure_baud_rate(unsigned short com, unsigned short divisor);
  *
  *  @param com  The serial port to configure
  */
-void serial_configure_line(unsigned short com);
+void serial_configure_line(unsigned long com);
 
 /** serial_configure_fifo_buffer:
  * 14 bytes as size of queue, clear both receiver and transmission FIFO
@@ -136,7 +136,7 @@ void serial_configure_line(unsigned short com);
  *
  *  @param com  The serial port to configure
  */
-void serial_configure_fifo_buffer(unsigned short com);
+void serial_configure_fifo_buffer(unsigned long com);
 
 /** serial_configure_modem:
  *  The modem control register is used for very simple hardware flow control via
@@ -146,7 +146,7 @@ void serial_configure_fifo_buffer(unsigned short com);
  *
  *  @param com  The serial port to configure
  */
-void serial_configure_modem(unsigned short com);
+void serial_configure_modem(unsigned long com);
 
 /** serial_is_transmit_fifo_empty:
  *  Checks whether the transmit FIFO queue is empty or not for the given COM
@@ -156,7 +156,7 @@ void serial_configure_modem(unsigned short com);
  *  @return 0 if the transmit FIFO queue is not empty
  *          1 if the transmit FIFO queue is empty
  */
-int serial_is_transmit_fifo_empty(unsigned short com);
+int serial_is_transmit_fifo_empty(unsigned long com);
 
 /** write:
  *  writes the contents of the buffer buf of length len to the screen
@@ -164,7 +164,7 @@ int serial_is_transmit_fifo_empty(unsigned short com);
  *  @param buf  Buffer that has contents to be written to screen
  *  @param len  Length of buffer
  */
-int serial_write(unsigned short com, char *buf, unsigned int len);
+int serial_write(unsigned long com, char *buf, unsigned int len);
 
 /** serial_write_byte:
  *  Write byte data to given serial port
@@ -172,7 +172,7 @@ int serial_write(unsigned short com, char *buf, unsigned int len);
  *  @param port Serial port to which data has to be written
  * @param byte_data 8 bit data
  */
-void serial_write_byte(unsigned short com, char byteData);
+void serial_write_byte(unsigned long com, char byteData);
 
 /** serial_configure:
  *  Configure serial port
@@ -180,8 +180,8 @@ void serial_write_byte(unsigned short com, char byteData);
  *  @param port Serial port which needs to be configured
  * @param baudRate rate at which data needs to be transmitted
  */
-void serial_configure(unsigned short com, unsigned short baudRate);
+void serial_configure(unsigned long com, unsigned long baudRate);
 
-extern int configured_com;
+extern unsigned long configured_com;
 
 #endif /* INCLUDE_IO_H */

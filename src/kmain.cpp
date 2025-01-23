@@ -4,6 +4,7 @@
 #include "std.h"
 #include "process.h"
 #include "interrupts.h"
+#include "paging.h"
 
 
 page_table_t process_page_table;
@@ -28,6 +29,7 @@ extern "C" int kmain(multiboot_info_t &multiboot_info) {
         : "memory"
     );
 
+    init_kernel_paging(); 
     //frame buffer test
     char buffer[] = "frame buffer running";
 

@@ -1,6 +1,8 @@
 #ifndef PAGING_H
 #define PAGING_H
 
+#define KERNEL_OFFSET 0xc0000000
+
 typedef unsigned long page_table_t[1024] __attribute__((aligned(0x1000)));
 typedef unsigned long page_directory_t[1024] __attribute__((aligned(0x1000)));
 //table and directory flags
@@ -9,6 +11,7 @@ typedef unsigned long page_directory_t[1024] __attribute__((aligned(0x1000)));
 #define USER 0x4 //if not defined than superuser
 
 void init_memory_map();
+void init_kernel_paging();
 void init_page_directory(page_directory_t &page_directory, unsigned short flags);
 void init_page_table(page_table_t &page_table, unsigned short flags);
 
@@ -25,14 +28,7 @@ void switch_page(unsigned long src_add, page_directory_t &src_dir, unsigned long
 void clear_flags(page_directory_t &directory, page_index index);
 void clear_flags(page_table_t &table, int index);
 
-extern "C" void load_page_directory(page_directory_t &directory);
-extern "C" void enable_paging();
-extern "C" void disable_paging();
-
-extern "C" unsigned long loader_func(page_directory_t * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);
-extern "C" void loader_func_end(void);
-
-
-page_directory_t* get_kernel_page_dir();
+extern "C" page_directory_t kernel_page_directory;
+extern "C" page_table_t kernel_page_table;
 
 #endif // PAGING_H
