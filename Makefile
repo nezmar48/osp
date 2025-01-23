@@ -56,9 +56,9 @@ bochs: os.iso
 	bochs -f src/bochsrc.txt -q
 
 clean: 
-	rm -r bin/
+	rm -rf bin/
 
 clean_modules:
-	rm -r iso/modules/
+	rm -fr iso/modules/
 
 run: bochs clean

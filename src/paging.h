@@ -31,4 +31,9 @@ void clear_flags(page_table_t &table, int index);
 extern "C" page_directory_t kernel_page_directory;
 extern "C" page_table_t kernel_page_table;
 
+template <typename T>
+T* add_offset(T* ptr) {
+    return (T*)((unsigned long)ptr + KERNEL_OFFSET);
+}
+
 #endif // PAGING_H

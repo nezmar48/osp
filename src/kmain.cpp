@@ -9,7 +9,9 @@
 
 page_table_t process_page_table;
 page_directory_t process_page_dir;
-extern "C" int kmain(multiboot_info_t &multiboot_info) {
+extern "C" int kmain(multiboot_info_t * multiboot_info) {
+
+    multiboot_info = add_offset(multiboot_info);
 
     unsigned long gdt = create_gdt();
     asm volatile (
@@ -41,8 +43,8 @@ extern "C" int kmain(multiboot_info_t &multiboot_info) {
     log(serial_buffer);
 
     //call program
-   
-    multiboot_module_t * program_mod = (multiboot_module_t *)multiboot_info.mods_addr;
+
+    multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
 
     fb_write_hex_32(program_mod->mod_start);
     
