@@ -7,37 +7,57 @@ void init_kernel_paging() {
     kernel_page_directory[0] = 0;
 
 }
-void init_page_directory(page_directory_t &page_directory, unsigned short flags) {
+void init_page_directory(page_directory_t *page_directory, unsigned short flags) {
      
     int i;
     for(i = 0; i < 1024; i++)
     {
-        page_directory[i] = flags;
+        (*page_directory)[i] = flags;
     }
-
+    (*page_directory)[get_index(KERNEL_OFFSET).dir] = (unsigned long)remove_offset(kernel_page_table) | PRESENT | READ_WRITE;
 }
 
-void init_page_table(page_table_t &page_table, unsigned short flags) {
+void init_page_table(page_table_t *page_table, unsigned short flags) {
      
     int i;
     for(i = 0; i < 1024; i++)
     {
-        page_table[i] = flags;
+        (*page_table)[i] = flags;
     }
-
+}
+int load_table_to_kernel(page_table_t * table) {
+    for (int i = 0; i < 1024; i++) {
+        if ((kernel_page_directory[i] & 0xfffff000) == 0) {
+            kernel_page_directory[i] = (unsigned long)remove_offset(table) | PRESENT | READ_WRITE;
+            return i;
+        }
+    }
+    char message[] = "kernel page directory full";
+    log(message);
+    asm ("cli; hlt");
+    return -1;
 }
 
-unsigned long get_page(page_directory_t &directory, unsigned long virtual_address, unsigned short flags) {
-    
+unsigned long get_page(page_directory_t * directory, unsigned long virtual_address, unsigned short flags) {
     unsigned long adress = get_free_page();
-    if (adress == 1)
-        asm ("cli; hlt; mov $0xff, %eax"); //memory full
+    if (adress == 1) {
+        char message[] = "memory full";
+        log(message);
+        asm ("cli; hlt");
+    }
     
     page_index index = get_index(virtual_address); 
-    unsigned long * table = get_table(directory, index.dir);
-    if (table == 0)
-        asm ("cli; hlt; mov $0xfd, %eax"); //table not initilazed
-    table[index.table] = adress | flags; // present flags overwriten!!
+
+    page_table_t * table = get_table(directory, index.dir);
+
+    if (table == 0) {
+        char message[] = "table not initilazed";
+        log(message);
+        asm ("cli; hlt");
+    }
+
+    (*table)[index.table] = adress | flags; // present flags overwriten!!
+
     return adress;
 }
 
@@ -77,21 +97,18 @@ page_index get_index(unsigned long virtual_address) {
     return index;
 }
 
-unsigned long * get_table(page_directory_t &directory, int index) {
-    return (unsigned long *)(directory[index] & 0xfffff000);
+page_table_t * get_table(page_directory_t *directory, int index) {
+    return add_offset((page_table_t *)((*directory)[index] & 0xfffff000));
 }
 
-void switch_page(unsigned long src_add, page_directory_t &src_dir, unsigned long dst_add, page_directory_t &dst_dir) {
-    page_index src_index = get_index(src_add);
-    page_index dst_index = get_index(dst_add);
-    unsigned long * src_table = get_table(src_dir, src_index.dir);
-    unsigned long * dst_table = get_table(dst_dir, dst_index.dir);
-    dst_table[dst_index.table] = src_table[src_index.table];
+unsigned long get_kernel_address(int kernel_index, unsigned long virtual_address) {
+    int table_index = get_index(virtual_address).table;
+    return kernel_index * 0x400000 + table_index * 0x1000;
 }
 
-void clear_flags(page_directory_t &directory, page_index index) {
+void clear_flags(page_directory_t *directory, page_index index) {
     page_table_t * table = (page_table_t *)get_table(directory, index.dir);
-    *table[index.table] &= 0xfffff000;
+    (*table)[index.table] &= 0xfffff000;
 }
 
 void clear_flags(page_table_t &table, int index) {

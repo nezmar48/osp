@@ -69,11 +69,6 @@ loader:
 
 higher_half:
 
-    ; ; protected mode is already enabled, DS is at 0x10
-    
-    ; extern init_kernel_paging
-    ; call init_kernel_paging
-
     extern kmain
     call kmain
 

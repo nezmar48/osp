@@ -1,23 +1,27 @@
 global call_process
 
 call_process:
-    push ebp
-    mov ebp, esp
+    ;save kernel stack for interrupt use
 
-    mov ebx, [ebp + 8]      ; Load address
-    mov ecx, [ebp + 12]     ; Load args array pointer
-    mov edx, [ebp + 16]     ; Load size (number of arguments)
+    mov eax, [esp + 4]      ; load page dir
+    mov ebx, [esp + 8]      ; Load address
+    mov edi, [esp + 12]     ; Load args array pointer
+    mov ecx, [esp + 16]     ; Load size (number of arguments)
+    
+    mov cr3, eax
 
-    mov eax, edx
+    mov ebp, 0xc0000000 - 4
+    mov esp, ebp
+
 .loop:
-    cmp eax, 0
+    cmp ecx, 0
     je .call
-    dec eax
-    push dword [ecx + eax * 4]
+    dec ecx
+    push dword [edi + ecx * 4]
     jmp .loop
 
 .call:
-    call ebx
+    jmp ebx
     mov esp, ebp
     pop ebp 
     ret

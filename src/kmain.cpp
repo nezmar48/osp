@@ -6,9 +6,9 @@
 #include "interrupts.h"
 #include "paging.h"
 
-
-page_table_t process_page_table;
 page_directory_t process_page_dir;
+page_table_t process_page_table_main;
+page_directory_t process_page_table_stack;
 extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     multiboot_info = add_offset(multiboot_info);
@@ -48,18 +48,18 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     fb_write_hex_32(program_mod->mod_start);
     
-    // process program(program_mod, process_page_dir, process_page_table);
+    process program(program_mod, &process_page_dir, &process_page_table_main, &process_page_table_stack);
 
-    // unsigned long test_args[] = {2, 3};
+    unsigned long test_args[] = {2, 3};
 
-    // program.args.args = test_args;
-    // program.args.size = 2;
+    program.args.args = test_args;
+    program.args.size = 2;
 
-    // unsigned long result = program.call();  
+    unsigned long result = program.call();  
 
     char proces_result_message[] = "function operands sucess:";
     log(proces_result_message);
-    // log((test_args[0] + test_args[1]) == result);
+    log((test_args[0] + test_args[1]) == result);
 
     return 0xcafebabe;
 }

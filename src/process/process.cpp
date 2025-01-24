@@ -5,31 +5,31 @@
 
 int process::ids = 0;
 
-process::process(multiboot_module_t *module, page_directory_t &directory, page_table_t &page_table) {
+process::process(multiboot_module_t *module, page_directory_t *page_directory, page_table_t *main_table, page_table_t *stack_table) {
     this->id = ids++; 
     this->module = *module;
-    this->page_dir = &directory;
-    this->page_table = &page_table;
-    init_page_directory(directory, READ_WRITE | USER);
-    init_page_table(page_table, READ_WRITE | USER);
-    *(this->page_dir)[0] |= (unsigned long)(*(this->page_table)) | PRESENT;
+    this->page_dir = (unsigned long*)page_directory;
+    this->page_table_main = (unsigned long*)main_table;
+    this->page_table_stack = (unsigned long*)stack_table;
+    init_page_directory(page_directory, READ_WRITE | USER);
+
+    init_page_table(main_table, READ_WRITE | USER);
+    this->main_table_kernel_index = load_table_to_kernel(main_table);
+    this->page_dir[0] |= (unsigned long)remove_offset(this->page_table_main) | PRESENT;
+
+    init_page_table(stack_table, READ_WRITE | USER);
+    this->page_dir[get_index(KERNEL_OFFSET - 0x1000).dir] |= (unsigned long)remove_offset(this->page_table_stack) | PRESENT;
 }
 
 unsigned long process::call(void) {
-    load();
-    switch_on();
 
-    for (int i = 0; i < 1024; i++)
-        log((*(this->page_dir))[i]);
-    for (int i = 0; i < 1024; i++)
-        log((*(this->page_table))[i]);
+    load();
 
     char entering_message[] = "entering process \0";
     log(entering_message);
     log(this->id);
-    loaded_loader_process call_process = (loaded_loader_process)this->address;
-    
-    unsigned long result = call_process(this->page_dir, 0, this->args.args, this->args.size);
+   
+    unsigned long result = call_process(remove_offset(this->page_dir), 0, this->args.args, this->args.size);
 
     char exit_message[] = "exiting process \0";
     log(exit_message);
@@ -39,27 +39,12 @@ unsigned long process::call(void) {
 }
 void process::load() {
 
-    unsigned short flags = READ_WRITE | PRESENT;
+    unsigned short flags = READ_WRITE | PRESENT | USER;
 
-    unsigned long address = get_page(kernel_page_directory, 0x400000, flags);
-    get_page(kernel_page_directory, 0x401000, flags);
-
+    get_page((page_directory_t*)this->page_dir, 0x0, flags);
+    get_page((page_directory_t*)this->page_dir, KERNEL_OFFSET - 0x1000, flags);
     unsigned long mod_size =  this->module.mod_end - this->module.mod_start;
-    memcopy(this->module.mod_start, address, mod_size / 4); 
-
-    this->address = (address + mod_size);
-    this->physical_start = address;
-    this->physical_end = address + mod_size;
-}
-
-void process::switch_on() {
-
-    switch_page(physical_start, kernel_page_directory, 0, *this->page_dir); 
-    clear_flags(*this->page_table, 0);
-    (*(this->page_table))[0] |= PRESENT | READ_WRITE | USER; 
-
-    switch_page(physical_start + 0x1000, kernel_page_directory, 0x1000, *this->page_dir);
-    clear_flags(*this->page_table, 1);
-    (*(this->page_table))[1] |= PRESENT | READ_WRITE | USER; 
-    
+    log(get_kernel_address(main_table_kernel_index, 0));
+    log(this->module.mod_start + KERNEL_OFFSET);
+    memcopy(this->module.mod_start + KERNEL_OFFSET, get_kernel_address(main_table_kernel_index, 0), mod_size / 4); 
 }
