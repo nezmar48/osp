@@ -1,12 +1,16 @@
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
     	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -ffreestanding \
-		 -mno-sse -mno-sse2 -mno-mmx -mno-avx
+		 -mno-sse -mno-sse2 -mno-mmx -mno-avx -mno-red-zone -mgeneral-regs-only -Wno-unknown-pragmas
 
 # add cpp and assembly files here (no suffix)  
 
-OBJECTS = loader kmain gdt multiboot\
-		  output/io output/frame_buffer output/serial_port \
-		  interrupts/ex_handlers interrupts/idt interrupts/interrupts
+OBJECTS = 	loader kmain \
+			other/gdt other/multiboot \
+			process/process process/call_process\
+		  	output/io output/frame_buffer output/serial_port \
+		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
+		  	paging/paging\
+			stdlib/string stdlib/memcopy stdlib/math
 
 MODULES = program
 
@@ -42,7 +46,7 @@ iso/modules/%: modules/%.cpp
 	mkdir -p $(dir $@)
 	g++ $(CFLAGS) $< -o $@
 
-.PHONY: modules bochs clean clean_modules run 
+.PHONY: modules bochs clean clean_modules run
 
 modules: clean_modules $(addprefix iso/modules/, $(MODULES))
 
@@ -52,9 +56,9 @@ bochs: os.iso
 	bochs -f src/bochsrc.txt -q
 
 clean: 
-	rm -r bin/
+	rm -rf bin/
 
 clean_modules:
-	rm -r iso/modules/
+	rm -fr iso/modules/
 
 run: bochs clean

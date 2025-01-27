@@ -1,6 +1,7 @@
-#include "frame_buffer.h"	
+#include "../output.h"	
+#include "../paging.h"
 
-static char *fb = (char *)0x000B8000;
+static char *fb = (char *)(0x000B8000 + KERNEL_OFFSET) ;
 
 void fb_move_cursor(unsigned short pos) {
 	outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);

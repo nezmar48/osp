@@ -1,26 +1,13 @@
-class __attribute__((packed)) idt_entry {
-    public:
-        unsigned short isr_low;      // The lower 16 bits of the ISR's address
-	    unsigned short kernel_cs;    // The GDT segment selector that the CPU will load into CS before calling the ISR
-	    unsigned char  reserved;     // Set to zero
-	    unsigned char  attributes;   // Type and attributes; see the IDT page
-	    unsigned short isr_high;     // The higher 16 bits of the ISR's address
-};
-class __attribute__((packed)) idtr{
-    public:
-	    unsigned short limit;
-        unsigned long	base;
-};
-void idt_set_descriptor(unsigned char vector, void* isr, unsigned char flags);
-extern "C" unsigned long idt_init(void);
+#include "../interrupts.h"
 
-const int IDT_ENTRIES = 33;  // Declare the constant
+const int IDT_ENTRIES = 34;  // Declare the constant
 
 __attribute__((aligned(0x10))) 
 static idt_entry idt[256]; // Create an array of IDT entries; aligned for performance
 
 static idtr idtr;
 
+static bool vectors[IDT_ENTRIES];
 void idt_set_descriptor(unsigned char vector, void* isr, unsigned char flags) {
     idt_entry* descriptor = &idt[vector];
 
@@ -30,10 +17,6 @@ void idt_set_descriptor(unsigned char vector, void* isr, unsigned char flags) {
     descriptor->isr_high       = (unsigned long)isr >> 16;
     descriptor->reserved       = 0;
 }
-
-static bool vectors[IDT_ENTRIES];
-
-extern void* isr_stub_table[];
 
 unsigned long idt_init() {
     idtr.base = (unsigned long)&idt[0];

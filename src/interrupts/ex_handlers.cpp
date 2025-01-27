@@ -1,16 +1,58 @@
-#include "../output/serial_port.h"
-extern "C"
-void default_exception_handler(void);
+#pragma clang diagnostic ignored "-Wexcessive-regsave"
 
-void  default_exception_handler() {
-    // __asm__ volatile ("cli; hlt"); // Completely hangs the computer
-    // __builtin_unreachable(); 
+#include "../std.h"
+#include "../interrupts.h"
+#include "../process.h"
+#include "../paging.h"
+
+
+void pass_no_error_stub(default_interrupt_frame frame) { 
+    (void)frame;
+    char message[] = "no err int recieved";
+    log(message);
 }
 
-extern "C" int test_exception_handler(){
+void pass_error_stub(error_interrupt_frame frame) {
+    char message[] = "int recieved:";
+    log(message);
+    log(frame.error);
+}
 
-    serial_configure(SERIAL_COM1_BASE, Baud_115200);
-    char serial_buffer[] = "interrupts running \n";
-    serial_write(SERIAL_COM1_BASE, serial_buffer, sizeof(serial_buffer));
-   return 32;
+void page_fault(error_interrupt_frame frame) {
+    if (!(frame.error & 0x1)) { //non present page
+        unsigned long virtual_address;
+        asm ("mov %%cr2, %0" : "=r" (virtual_address));
+        get_page(&process_page_dir, virtual_address, PRESENT | USER | READ_WRITE);
+    }
+    else {
+        asm volatile ("cli; hlt; mov $0xdeadc0de, %eax");
+    }
+}
+
+extern "C" void test_interrupt(default_interrupt_frame frame) {
+    (void)frame;
+    char message[] = "interrupts running";
+    log(message);
+    // log(frame.edi);
+    // log(frame.esi);
+    // log(frame.ebp);
+    // log(frame.esp);
+    // log(frame.ebx);
+    // log(frame.edx);
+    // log(frame.ecx);
+    // log(frame.eax);
+    // log(frame.eip);
+    // log(frame.cs);
+    // log(frame.flags);
+
+}
+
+extern "C" void system_call(default_interrupt_frame frame, unsigned long result) {
+    (void)frame;
+    char message[] = "system call recived";
+    log(message);
+    log(result);
+
+
+    return_process(result);
 }

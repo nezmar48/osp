@@ -1,16 +1,16 @@
 %macro isr_err_stub 1-2
 isr_stub_%+%1:
     %if %0 > 1              ; Check if a second argument was provided
-        pusha
+        pushad
         extern %2
         call %2             ; Call the provided handler
-        popa
+        popad
+        add esp, 4      ;discard error code
     %else
-        pusha
-        call default_exception_handler ; Default handler if no argument
         mov eax, 0xDEADBEEF
         mov ebx, %1
-        popa
+        cli
+        hlt
     %endif
     iret
 %endmacro
@@ -18,21 +18,19 @@ isr_stub_%+%1:
 %macro isr_no_err_stub 1-2
 isr_stub_%+%1:
     %if %0 > 1              ; Check if a second argument was provided
-        pusha
+        pushad
         extern %2
         call %2             ; Call the provided handler
-        popa
+        popad
     %else
-        pusha
-        call default_exception_handler ; Default handler if no argument
         mov eax, 0xDEADBEEF
         mov ebx, %1
-        popa
+        cli
+        hlt
     %endif
     iret
-%endmacro
+    %endmacro
 
-extern default_exception_handler
 isr_no_err_stub 0
 isr_no_err_stub 1
 isr_no_err_stub 2
@@ -41,13 +39,13 @@ isr_no_err_stub 4
 isr_no_err_stub 5
 isr_no_err_stub 6
 isr_no_err_stub 7
-isr_err_stub    8
+isr_no_err_stub    8, pass_error_stub   ;actual double fault has error but hardware does not
 isr_no_err_stub 9
 isr_err_stub    10
 isr_err_stub    11
 isr_err_stub    12
 isr_err_stub    13
-isr_err_stub    14
+isr_err_stub    14, page_fault
 isr_no_err_stub 15
 isr_no_err_stub 16
 isr_err_stub    17
@@ -65,10 +63,11 @@ isr_no_err_stub 28
 isr_no_err_stub 29
 isr_err_stub    30
 isr_no_err_stub 31
-isr_no_err_stub 32, test_exception_handler
+isr_no_err_stub 32, system_call
+isr_no_err_stub 33, test_interrupt
 
 section .data
-    IDT_ENTRIES equ 33
+    IDT_ENTRIES equ 34
 
 global isr_stub_table
 isr_stub_table:
