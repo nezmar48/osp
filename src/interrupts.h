@@ -32,11 +32,25 @@ typedef struct {
     unsigned long flags;
 }default_interrupt_frame;
 
+typedef struct {
+    unsigned long edi;
+    unsigned long esi;
+    unsigned long ebp;
+    unsigned long esp;
+    unsigned long ebx;
+    unsigned long edx;
+    unsigned long ecx;
+    unsigned long eax;
+    unsigned long error;
+    unsigned long eip;
+    unsigned long cs;
+    unsigned long flags;
+}error_interrupt_frame;
 extern "C" void* isr_stub_table[];
 
-extern "C" void pass_no_error_stub(default_interrupt_frame * frame);
-extern "C" void pass_error_stub(default_interrupt_frame * frame, unsigned long error_code);
-extern "C" void page_fault(default_interrupt_frame * frame, unsigned long error_code);
+extern "C" void pass_no_error_stub(default_interrupt_frame frame);
+extern "C" void pass_error_stub(error_interrupt_frame frame);
+extern "C" void page_fault(error_interrupt_frame frame);
 extern "C" void test_interrupt(default_interrupt_frame frame);
 extern "C" void system_call(default_interrupt_frame frame, unsigned long result);
 

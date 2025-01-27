@@ -6,23 +6,27 @@
 #include "../paging.h"
 
 
-void pass_no_error_stub(default_interrupt_frame * frame) { 
+void pass_no_error_stub(default_interrupt_frame frame) { 
     (void)frame;
-    char message[] = "no err int recived";
+    char message[] = "no err int recieved";
     log(message);
 }
 
-void pass_error_stub(default_interrupt_frame * frame, unsigned long error_code) {
-    (void)frame;
-    char message[] = "int recived:";
+void pass_error_stub(error_interrupt_frame frame) {
+    char message[] = "int recieved:";
     log(message);
-    log(error_code);
+    log(frame.error);
 }
 
-void page_fault(default_interrupt_frame * frame, unsigned long error_code) {
-    (void)frame;
-    log(error_code);
-    asm volatile ("cli; hlt; mov $0xdeadc0de, %eax");
+void page_fault(error_interrupt_frame frame) {
+    if (!(frame.error & 0x1)) { //non present page
+        unsigned long virtual_address;
+        asm ("mov %%cr2, %0" : "=r" (virtual_address));
+        get_page(&process_page_dir, virtual_address, PRESENT | USER | READ_WRITE);
+    }
+    else {
+        asm volatile ("cli; hlt; mov $0xdeadc0de, %eax");
+    }
 }
 
 extern "C" void test_interrupt(default_interrupt_frame frame) {

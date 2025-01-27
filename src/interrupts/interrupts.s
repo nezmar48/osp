@@ -5,6 +5,7 @@ isr_stub_%+%1:
         extern %2
         call %2             ; Call the provided handler
         popad
+        add esp, 4      ;discard error code
     %else
         mov eax, 0xDEADBEEF
         mov ebx, %1
@@ -38,7 +39,7 @@ isr_no_err_stub 4
 isr_no_err_stub 5
 isr_no_err_stub 6
 isr_no_err_stub 7
-isr_err_stub    8, pass_error_stub
+isr_no_err_stub    8, pass_error_stub   ;actual double fault has error but hardware does not
 isr_no_err_stub 9
 isr_err_stub    10
 isr_err_stub    11
