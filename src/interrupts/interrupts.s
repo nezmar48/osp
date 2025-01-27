@@ -1,34 +1,20 @@
-%macro isr_err_stub 1-2
+%macro isr_err_stub 1
 isr_stub_%+%1:
-    %if %0 > 1              ; Check if a second argument was provided
-        pusha
-        extern %2
-        call %2             ; Call the provided handler
-        popa
-    %else
-        mov eax, 0xDEADBEEF
-        mov ebx, %1
-        cli
-        hlt
-    %endif
+    mov eax, 0xDEADBEEF
+    mov ebx, %1
+    cli
+    hlt
     iret
 %endmacro
 
-%macro isr_no_err_stub 1-2
+%macro isr_no_err_stub 1
 isr_stub_%+%1:
-    %if %0 > 1              ; Check if a second argument was provided
-        pusha
-        extern %2
-        call %2             ; Call the provided handler
-        popa
-    %else
-        mov eax, 0xDEADBEEF
-        mov ebx, %1
-        cli
-        hlt
-    %endif
+    mov eax, 0xDEADBEEF
+    mov ebx, %1
+    cli
+    hlt
     iret
-    %endmacro
+%endmacro
 
 isr_no_err_stub 0
 isr_no_err_stub 1
@@ -38,13 +24,13 @@ isr_no_err_stub 4
 isr_no_err_stub 5
 isr_no_err_stub 6
 isr_no_err_stub 7
-isr_err_stub    8, unimplemented_interrupt
+isr_err_stub    8
 isr_no_err_stub 9
 isr_err_stub    10
 isr_err_stub    11
 isr_err_stub    12
 isr_err_stub    13
-isr_err_stub    14, page_fault_handler
+isr_err_stub    14
 isr_no_err_stub 15
 isr_no_err_stub 16
 isr_err_stub    17
@@ -62,13 +48,12 @@ isr_no_err_stub 28
 isr_no_err_stub 29
 isr_err_stub    30
 isr_no_err_stub 31
-isr_no_err_stub 32, test_exception_handler
 
 section .data
-    IDT_ENTRIES equ 33
+    IDT_ENTRIES equ 32
 
-global isr_stub_table
-isr_stub_table:
+global intel_stub_table
+intel_stub_table:
 %assign i 0 
 %rep    IDT_ENTRIES 
     dd isr_stub_%+i 

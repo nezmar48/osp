@@ -18,8 +18,23 @@ class __attribute__((packed)) idtr{
 void idt_set_descriptor(unsigned char vector, void* isr, unsigned char flags);
 unsigned long idt_init(void);
 
+struct default_interrupt_frame
+{
+    unsigned long ip;
+    unsigned long cs;
+    unsigned long flags;
+    unsigned long sp;
+    unsigned long ss;
+};;
 
+extern "C" void* intel_stub_table[];
 
-extern void* isr_stub_table[];
+__attribute__((interrupt)) void default_no_error_stub(default_interrupt_frame * frame);
+__attribute__((interrupt)) void default_error_stub(default_interrupt_frame * frame, unsigned long error_code);
+__attribute__((interrupt)) void pass_no_error_stub(default_interrupt_frame * frame);
+__attribute__((interrupt)) void pass_error_stub(default_interrupt_frame * frame, unsigned long error_code);
+__attribute__((interrupt)) void page_fault(default_interrupt_frame * frame, unsigned long error_code);
+__attribute__((interrupt)) void test_interrupt(default_interrupt_frame * frame);
+__attribute__((interrupt)) void system_call(default_interrupt_frame * frame, unsigned long error_code);
 
 #endif // !INTERRUPTS

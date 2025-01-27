@@ -1,19 +1,41 @@
-#include "../std.h"
+#pragma clang diagnostic ignored "-Wexcessive-regsave"
 
-extern "C" int test_exception_handler(){
+#include "../std.h"
+#include "../interrupts.h"
+
+void default_no_error_stub(default_interrupt_frame * frame) {
+    (void)frame;
+     asm volatile ("cli; hlt; mov $0xdeadbeef, %eax");
+}
+void default_error_stub(default_interrupt_frame * frame, unsigned long error_code) {
+    (void)frame;
+    log(error_code);
+    asm volatile ("cli; hlt; mov $0xdeadbeef, %eax");
+}
+void pass_no_error_stub(default_interrupt_frame * frame) { 
+    (void)frame;
+    char message[] = "no err int recived";
+    log(message);
+}
+void pass_error_stub(default_interrupt_frame * frame, unsigned long error_code) {
+    (void)frame;
+    char message[] = "int recived:";
+    log(message);
+    log(error_code);
+}
+void page_fault(default_interrupt_frame * frame, unsigned long error_code) {
+    (void)frame;
+    log(error_code);
+    asm volatile ("cli; hlt; mov $0xdeadc0de, %eax");
+}
+void test_interrupt(default_interrupt_frame * frame) {
+    (void)frame;
     char message[] = "interrupts running";
     log(message);
-   return 32;
 }
-
-extern "C" void  page_fault_handler() {
-    int test = 0xcafebabe;
-    test++;
-     __asm__ volatile ("cli; hlt; mov $0xdeadc0de, %eax"); // Completely hangs the computer
-    // __builtin_unreachable(); 
-}
-
-extern "C" void  unimplemented_interrupt() {
-    char message[] = "int 8 recived";
+void system_call(default_interrupt_frame * frame, unsigned long error_code) {
+    (void)frame;
+    char message[] = "system call recived";
     log(message);
+    log(error_code);
 }

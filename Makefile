@@ -1,6 +1,6 @@
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
     	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -ffreestanding \
-		 -mno-sse -mno-sse2 -mno-mmx -mno-avx
+		 -mno-sse -mno-sse2 -mno-mmx -mno-avx -mno-red-zone -mgeneral-regs-only -Wno-unknown-pragmas
 
 # add cpp and assembly files here (no suffix)  
 
