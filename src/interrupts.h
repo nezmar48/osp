@@ -18,23 +18,26 @@ class __attribute__((packed)) idtr{
 void idt_set_descriptor(unsigned char vector, void* isr, unsigned char flags);
 unsigned long idt_init(void);
 
-struct default_interrupt_frame
-{
-    unsigned long ip;
+typedef struct {
+    unsigned long edi;
+    unsigned long esi;
+    unsigned long ebp;
+    unsigned long esp;
+    unsigned long ebx;
+    unsigned long edx;
+    unsigned long ecx;
+    unsigned long eax;
+    unsigned long eip;
     unsigned long cs;
     unsigned long flags;
-    unsigned long sp;
-    unsigned long ss;
-};;
+}default_interrupt_frame;
 
-extern "C" void* intel_stub_table[];
+extern "C" void* isr_stub_table[];
 
-__attribute__((interrupt)) void default_no_error_stub(default_interrupt_frame * frame);
-__attribute__((interrupt)) void default_error_stub(default_interrupt_frame * frame, unsigned long error_code);
-__attribute__((interrupt)) void pass_no_error_stub(default_interrupt_frame * frame);
-__attribute__((interrupt)) void pass_error_stub(default_interrupt_frame * frame, unsigned long error_code);
-__attribute__((interrupt)) void page_fault(default_interrupt_frame * frame, unsigned long error_code);
-__attribute__((interrupt)) void test_interrupt(default_interrupt_frame * frame);
-__attribute__((interrupt)) void system_call(default_interrupt_frame * frame, unsigned long error_code);
+extern "C" void pass_no_error_stub(default_interrupt_frame * frame);
+extern "C" void pass_error_stub(default_interrupt_frame * frame, unsigned long error_code);
+extern "C" void page_fault(default_interrupt_frame * frame, unsigned long error_code);
+extern "C" void test_interrupt(default_interrupt_frame frame);
+extern "C" void system_call(default_interrupt_frame frame, unsigned long result);
 
 #endif // !INTERRUPTS

@@ -25,7 +25,7 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     asm volatile (
         "lidt (%0);"
         "sti;"
-        "int $32;"
+        "int $33;"
         :
         : "r" (idt)
         : "memory"

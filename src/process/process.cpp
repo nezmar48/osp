@@ -3,6 +3,7 @@
 #include "../paging.h"
 
 
+return_registers_t return_registers;
 int process::ids = 0;
 
 process::process(multiboot_module_t *module, page_directory_t *page_directory, page_table_t *main_table, page_table_t *stack_table) {
@@ -44,7 +45,5 @@ void process::load() {
     get_page((page_directory_t*)this->page_dir, 0x0, flags);
     get_page((page_directory_t*)this->page_dir, KERNEL_OFFSET - 0x1000, flags);
     unsigned long mod_size =  this->module.mod_end - this->module.mod_start;
-    log(get_kernel_address(main_table_kernel_index, 0));
-    log(this->module.mod_start + KERNEL_OFFSET);
     memcopy(this->module.mod_start + KERNEL_OFFSET, get_kernel_address(main_table_kernel_index, 0), mod_size / 4); 
 }

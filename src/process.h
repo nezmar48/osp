@@ -5,6 +5,7 @@
 #include "multiboot.h"
 
 extern "C" unsigned long call_process(unsigned long * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);
+extern "C" unsigned long return_process(unsigned long result);
 class process {
     public: 
 
@@ -28,5 +29,14 @@ class process {
         void load();
         void switch_on();
 };
+
+typedef struct{
+    unsigned long eip;
+    unsigned long ebp;
+    unsigned long esp;
+    unsigned long cr3;
+}return_registers_t;
+
+extern "C" return_registers_t return_registers;
 
 #endif //PROCESS
