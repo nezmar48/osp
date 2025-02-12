@@ -1,6 +1,7 @@
-#include "frame_buffer.h"	
+#include "../output.h"	
+#include "../paging.h"
 
-static char *fb = (char *)0x000B8000;
+static char *fb = (char *)(0x000B8000 + KERNEL_OFFSET) ;
 
 void fb_move_cursor(unsigned short pos) {
 	outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
@@ -8,16 +9,6 @@ void fb_move_cursor(unsigned short pos) {
 	outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
   outb(FB_DATA_PORT, pos & 0x00FF);
 }
-
-/** fb_write_cell:
-     *  Writes a character with the given foreground and background to position i
-     *  in the framebuffer.
-     *
-     *  @param i  The location in the framebuffer
-     *  @param c  The character
-     *  @param fg The foreground color
-     *  @param bg The background color
-     */
 
 void fb_write_cell(unsigned int i, char c, unsigned char bg, unsigned char fg) {
 	fb[i] = c;
@@ -45,6 +36,14 @@ void clear_screen() {
         cleaner_buffer[i] = ' ';  
     }
     cleaner_buffer[FB_SIZE] = '\0';  
-
     fb_write(cleaner_buffer, FB_SIZE, LIGHT_GREEN, BLACK);
 }
+/* unsigned int last_position = 0;
+
+void fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg) {
+    for (unsigned int i = 0; i < len; i++) {
+        fb_write_cell(i * 2 + last_position, *(buf + i), fg, bg);
+        fb_move_cursor(2);
+    }
+    last_position += len*2;
+} */

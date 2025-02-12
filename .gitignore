@@ -1,2 +1,4 @@
 bin/
-src/bochsrc.txt
+log/
+iso/boot/kernel.elf
+iso/modules/*
