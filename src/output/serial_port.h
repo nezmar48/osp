@@ -84,7 +84,7 @@ int serial_is_transmit_fifo_empty(unsigned short com);
  *  @param buf  Buffer that has contents to be written to screen
  *  @param len  Length of buffer
  */
-int serial_write(unsigned short com, char *buf, unsigned int len);
+int serial_write(unsigned short com, unsigned char *buf, unsigned int len);
 
 /** serial_write_byte:
  *  Write byte data to given serial port

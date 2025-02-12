@@ -55,6 +55,8 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
  *  @param len  Length of buffer
  */
 
-int fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg);
+int fb_write(unsigned char *buf, unsigned int len, unsigned char fg, unsigned char bg);
 
 #endif /* INCLUDE_IO_H */
+
+void clear_screen();

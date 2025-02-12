@@ -40,7 +40,7 @@ int serial_is_transmit_fifo_empty(unsigned short com) {
   return inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
 }
 
-int serial_write(unsigned short com, char *buf, unsigned int len) {
+int serial_write(unsigned short com, unsigned char *buf, unsigned int len) {
   unsigned int indexToBuffer = 0;
   while (indexToBuffer < len) {
     if (serial_is_transmit_fifo_empty(com)) {

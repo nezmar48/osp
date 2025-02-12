@@ -3,7 +3,7 @@ CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 
 # add cpp and assembly files here (no suffix)  
 
-OBJECTS = loader kmain output/io output/frame_buffer output/serial_port gdt  
+OBJECTS = loader kmain output/io output/frame_buffer output/serial_port gdt keyboard_input   
 
 os.iso: kernel.elf
 	genisoimage -R                          \
