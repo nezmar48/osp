@@ -32,6 +32,8 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     );
 
     init_kernel_paging(); 
+    init_heap(KERNEL_OFFSET + kernel_size * 0x400000);
+
     //frame buffer test
     char buffer[] = "frame buffer running";
 
@@ -41,6 +43,9 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     
     char serial_buffer[] = "serial running\0";
     log(serial_buffer);
+
+    //malloc test
+    malloc_test();
 
     //call program
 

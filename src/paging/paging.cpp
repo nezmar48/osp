@@ -1,10 +1,21 @@
 #include "../paging.h"
 #include "../std.h"
+
+page_table_t kernel_heap_table;
+int kernel_size = 1; //size of kernel / 0x400000 + 1 (how many tables it has)
+
 void init_kernel_paging() {
 
     init_memory_map();
 
     kernel_page_directory[0] = 0;
+
+    init_page_table(&kernel_heap_table, READ_WRITE);
+    kernel_page_directory[KERNEL_OFFSET / 0x400000 + kernel_size] = (unsigned long)remove_offset(kernel_heap_table) | PRESENT | READ_WRITE;
+    
+    for (int i = 0; i < 1024; i++) {
+        get_page(&kernel_page_directory, KERNEL_OFFSET + kernel_size * 0x400000 + i * 0x1000 , READ_WRITE | PRESENT);
+    }
 
 }
 void init_page_directory(page_directory_t *page_directory, unsigned short flags) {

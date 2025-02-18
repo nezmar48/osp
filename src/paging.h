@@ -2,6 +2,7 @@
 #define PAGING_H
 
 #define KERNEL_OFFSET 0xc0000000
+extern int kernel_size;
 
 typedef unsigned long page_table_t[1024] __attribute__((aligned(0x1000)));
 typedef unsigned long page_directory_t[1024] __attribute__((aligned(0x1000)));
