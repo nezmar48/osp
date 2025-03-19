@@ -10,7 +10,7 @@ void log(char * string);
 void log(unsigned long hex);
 unsigned long log_two(unsigned long num);
 
-void * malloc(int size);
+void * malloc(int size, int allign = 1);
 void free(void * address);
 void init_heap(unsigned long heap_start_add);
 
