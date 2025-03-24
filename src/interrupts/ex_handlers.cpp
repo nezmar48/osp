@@ -19,6 +19,8 @@ void pass_error_stub(error_interrupt_frame frame) {
 }
 
 void page_fault(error_interrupt_frame frame) {
+    char msg[] = "page fault";
+    log(msg);
     if (!(frame.error & 0x1)) { //non present page
         unsigned long virtual_address;
         asm ("mov %%cr2, %0" : "=r" (virtual_address));

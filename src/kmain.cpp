@@ -32,7 +32,7 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     );
 
     init_kernel_paging(); 
-    init_heap(KERNEL_OFFSET + kernel_size * 0x400000);
+    init_heap(KERNEL_OFFSET + kernel_size * 0x400000, KERNEL_OFFSET + (kernel_size + 1) * 0x400000);
 
     //frame buffer test
     char buffer[] = "frame buffer running";
