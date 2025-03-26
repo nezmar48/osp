@@ -32,7 +32,7 @@ void clear_flags(page_table_t *table, int index);
 
 extern "C" page_directory_t kernel_page_directory;
 extern "C" page_table_t kernel_page_table;
-extern page_directory_t process_page_dir;
+
 
 template <typename T>
 T* add_offset(T* ptr) {

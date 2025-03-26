@@ -81,20 +81,21 @@ int find_free_chunks(int num, int allign) {
     return pos.i*32 + log_two(pos.j) - num - 1;
 }
 
-void mark_chunks_used(int first_chunk, int num) {
+void mark_chunks_used(int first_chunk, int num, bool alligned) {
     heap_map_position pos = position_from_num(first_chunk);
     for (int k = 0; k < num; k++) {
         heap_map[pos.i] |=  pos.j;
         position_step(&pos, 1);
     }
-    last_free_chunk = pos.i;
+    if (!alligned)
+        last_free_chunk = pos.i;
 }
 
 void * malloc(int size, int allign) {
-    int chunk_size = (size - 1) / CHUNK_SIZE + 1;
+    int chunk_size = (size - 1) / CHUNK_SIZE;
     int chunk_allign = (allign - 1) / CHUNK_SIZE + 1;
     int first_chunk = find_free_chunks(chunk_size, chunk_allign);
-    mark_chunks_used(first_chunk, chunk_size);
+    mark_chunks_used(first_chunk, chunk_size, chunk_allign != 1);
     return (void *)(heap_start + CHUNK_SIZE * first_chunk);
 }
 
