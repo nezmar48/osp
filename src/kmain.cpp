@@ -1,5 +1,5 @@
 #include "gdt.h"
-#include "output.h"
+// #include "output.h"
 #include "multiboot.h"
 #include "std.h"
 #include "process.h"
@@ -32,9 +32,9 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     init_heap(KERNEL_OFFSET + kernel_size * 0x400000, KERNEL_OFFSET + (kernel_size + 1) * 0x400000);
 
     //frame buffer test
-    char buffer[] = "frame buffer running";
-
-    fb_write(buffer,sizeof(buffer),LIGHT_GREEN,BLACK);
+    String buffer = String("frame buffer running \n");
+    frame_buffer fb;
+    fb.write(buffer);
      
     //serial test
     
@@ -48,7 +48,8 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
 
-    fb_write_hex_32(program_mod->mod_start);
+    fb.write(String(program_mod->mod_start));
+    log(program_mod->mod_start);
     
     process program(program_mod);
 
