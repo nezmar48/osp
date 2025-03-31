@@ -3,10 +3,10 @@
 unsigned long heap_start;
 unsigned long heap_end;
 
-const int N_CHUNKS = 1024;
-unsigned long actual_N_chunks;
 const int CHUNK_SIZE = 32;
-unsigned long heap_map[N_CHUNKS];
+const int N_CHUNKS = 0x400000 / CHUNK_SIZE;
+unsigned long actual_N_chunks;
+unsigned long heap_map[N_CHUNKS / 32];
 unsigned long last_free_chunk = 0;
 
 void init_heap_map() {
@@ -112,7 +112,7 @@ void free(void * address) {
 void init_heap(unsigned long heap_start_add, unsigned long heap_end_add) {
     heap_start = heap_start_add + 0x1000 - heap_start_add%0x1000;
     heap_end = heap_end_add - CHUNK_SIZE - heap_end_add%CHUNK_SIZE;
-    unsigned long chunks_space = (heap_start_add - heap_end_add) / CHUNK_SIZE;
+    unsigned long chunks_space = (heap_end_add - heap_start_add ) / CHUNK_SIZE;
     chunks_space > N_CHUNKS ? actual_N_chunks = N_CHUNKS : actual_N_chunks = chunks_space;
     init_heap_map();
 }
