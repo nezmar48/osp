@@ -6,9 +6,6 @@
 #include "interrupts.h"
 #include "paging.h"
 
-page_directory_t process_page_dir;
-page_table_t process_page_table_main;
-page_directory_t process_page_table_stack;
 extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     multiboot_info = add_offset(multiboot_info);
@@ -32,6 +29,8 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     );
 
     init_kernel_paging(); 
+    init_heap(KERNEL_OFFSET + kernel_size * 0x400000, KERNEL_OFFSET + (kernel_size + 1) * 0x400000);
+
     //frame buffer test
     char buffer[] = "frame buffer running";
 
@@ -42,13 +41,16 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     char serial_buffer[] = "serial running\0";
     log(serial_buffer);
 
+    //malloc test
+    malloc_test();
+
     //call program
 
     multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
 
     fb_write_hex_32(program_mod->mod_start);
     
-    process program(program_mod, &process_page_dir, &process_page_table_main, &process_page_table_stack);
+    process program(program_mod);
 
     unsigned long test_args[] = {2, 3};
 

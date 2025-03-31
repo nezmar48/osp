@@ -3,29 +3,32 @@
 #include "../paging.h"
 
 
+process * current_process_pt;
 return_registers_t return_registers;
 int process::ids = 0;
 
-process::process(multiboot_module_t *module, page_directory_t *page_directory, page_table_t *main_table, page_table_t *stack_table) {
+process::process(multiboot_module_t *module) {
+
     this->id = ids++; 
     this->module = *module;
-    this->page_dir = (unsigned long*)page_directory;
-    this->page_table_main = (unsigned long*)main_table;
-    this->page_table_stack = (unsigned long*)stack_table;
-    init_page_directory(page_directory, READ_WRITE | USER);
+    this->page_dir = (page_directory_t*)malloc(0x1000, 0x1000);
+    this->page_table_main = (page_table_t*)malloc(0x1000, 0x1000);
+    this->page_table_stack = (page_table_t*)malloc(0x1000, 0x1000);
+    init_page_directory(this->page_dir, READ_WRITE | USER);
 
-    init_page_table(main_table, READ_WRITE | USER);
-    this->main_table_kernel_index = load_table_to_kernel(main_table);
-    this->page_dir[0] |= (unsigned long)remove_offset(this->page_table_main) | PRESENT;
+    init_page_table(this->page_table_main, READ_WRITE | USER);
+    this->main_table_kernel_index = load_table_to_kernel(this->page_table_main);
+    (*this->page_dir)[0] |= (unsigned long)remove_offset(this->page_table_main) | PRESENT;
 
-    init_page_table(stack_table, READ_WRITE | USER);
-    this->page_dir[get_index(KERNEL_OFFSET - 0x1000).dir] |= (unsigned long)remove_offset(this->page_table_stack) | PRESENT;
+    init_page_table(this->page_table_stack, READ_WRITE | USER);
+    (*this->page_dir)[get_index(KERNEL_OFFSET - 0x1000).dir] |= (unsigned long)remove_offset(this->page_table_stack) | PRESENT;
 }
 
 unsigned long process::call(void) {
 
     load();
 
+    current_process_pt = this;
     char entering_message[] = "entering process \0";
     log(entering_message);
     log(this->id);

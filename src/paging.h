@@ -2,6 +2,7 @@
 #define PAGING_H
 
 #define KERNEL_OFFSET 0xc0000000
+extern int kernel_size;
 
 typedef unsigned long page_table_t[1024] __attribute__((aligned(0x1000)));
 typedef unsigned long page_directory_t[1024] __attribute__((aligned(0x1000)));
@@ -31,7 +32,7 @@ void clear_flags(page_table_t *table, int index);
 
 extern "C" page_directory_t kernel_page_directory;
 extern "C" page_table_t kernel_page_table;
-extern page_directory_t process_page_dir;
+
 
 template <typename T>
 T* add_offset(T* ptr) {

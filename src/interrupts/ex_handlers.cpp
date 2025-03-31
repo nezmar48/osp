@@ -19,10 +19,12 @@ void pass_error_stub(error_interrupt_frame frame) {
 }
 
 void page_fault(error_interrupt_frame frame) {
+    char msg[] = "page fault";
+    log(msg);
     if (!(frame.error & 0x1)) { //non present page
         unsigned long virtual_address;
         asm ("mov %%cr2, %0" : "=r" (virtual_address));
-        get_page(&process_page_dir, virtual_address, PRESENT | USER | READ_WRITE);
+        get_page(current_process_pt->page_dir, virtual_address, PRESENT | USER | READ_WRITE);
     }
     else {
         asm volatile ("cli; hlt; mov $0xdeadc0de, %eax");

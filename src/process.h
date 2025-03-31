@@ -4,12 +4,12 @@
 #include "paging.h"
 #include "multiboot.h"
 
-extern "C" unsigned long call_process(unsigned long * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);
+extern "C" unsigned long call_process(page_directory_t * page_directory, unsigned long entry_symbol_ofset, unsigned long * args, unsigned long size);
 extern "C" unsigned long return_process(unsigned long result);
 class process {
     public: 
 
-        process(multiboot_module_t *module, page_directory_t *page_directory, page_table_t *main_table, page_table_t *stack_table);
+        process(multiboot_module_t *module);
         unsigned long address;
 
         struct {
@@ -20,12 +20,12 @@ class process {
         multiboot_module_t module;
         unsigned long call(void);
         int id;
+        page_directory_t * page_dir;
     private:
         static int ids;
-        unsigned long * page_dir;
-        unsigned long * page_table_main;
+        page_table_t * page_table_main;
         int main_table_kernel_index;
-        unsigned long * page_table_stack;
+        page_table_t * page_table_stack;
         void load();
         void switch_on();
 };
@@ -38,5 +38,6 @@ typedef struct{
 }return_registers_t;
 
 extern "C" return_registers_t return_registers;
+extern process * current_process_pt;
 
 #endif //PROCESS

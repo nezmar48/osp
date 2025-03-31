@@ -1,12 +1,25 @@
 #include "../paging.h"
 #include "../std.h"
+
+page_table_t kernel_heap_table;
+int kernel_size = 1; //size of kernel / 0x400000 + 1 (how many tables it has)
+int kernel_heap_size = 1;
+
 void init_kernel_paging() {
 
     init_memory_map();
 
     kernel_page_directory[0] = 0;
 
+    init_page_table(&kernel_heap_table, READ_WRITE);
+    kernel_page_directory[KERNEL_OFFSET / 0x400000 + kernel_size] = (unsigned long)remove_offset(kernel_heap_table) | PRESENT | READ_WRITE;
+    
+    for (int i = 0; i < 1024; i++) {
+        get_page(&kernel_page_directory, KERNEL_OFFSET + kernel_size * 0x400000 + i * 0x1000 , READ_WRITE | PRESENT);
+    }
+
 }
+
 void init_page_directory(page_directory_t *page_directory, unsigned short flags) {
      
     int i;
@@ -14,11 +27,13 @@ void init_page_directory(page_directory_t *page_directory, unsigned short flags)
     {
         (*page_directory)[i] = flags;
     }
-    (*page_directory)[get_index(KERNEL_OFFSET).dir] = (unsigned long)remove_offset(kernel_page_table) | PRESENT | READ_WRITE;
+    int index = get_index(KERNEL_OFFSET).dir;
+    for (int i = 0; i < (kernel_size + kernel_heap_size); i++) {
+        (*page_directory)[index + i] = (unsigned long)remove_offset(get_table(&kernel_page_directory, index + i)) | PRESENT | READ_WRITE;
+    }
 }
 
 void init_page_table(page_table_t *page_table, unsigned short flags) {
-     
     int i;
     for(i = 0; i < 1024; i++)
     {
@@ -32,7 +47,7 @@ int load_table_to_kernel(page_table_t * table) {
             return i;
         }
     }
-    char message[] = "kernel page directory full";
+    char message[] = "kernel page directory full\0";
     log(message);
     asm ("cli; hlt");
     return -1;
@@ -41,7 +56,7 @@ int load_table_to_kernel(page_table_t * table) {
 unsigned long get_page(page_directory_t * directory, unsigned long virtual_address, unsigned short flags) {
     unsigned long adress = get_free_page();
     if (adress == 1) {
-        char message[] = "memory full";
+        char message[] = "memory full\0";
         log(message);
         asm ("cli; hlt");
     }
@@ -49,11 +64,17 @@ unsigned long get_page(page_directory_t * directory, unsigned long virtual_addre
     page_index index = get_index(virtual_address); 
 
     page_table_t * table = get_table(directory, index.dir);
-
-    if (table == 0) {
-        char message[] = "table not initilazed";
+    // log(virtual_address);
+    // log((unsigned long)table);
+    if ((unsigned long)remove_offset(table) == 0) {
+        char message[] = "table not initilazed\0";
         log(message);
-        asm ("cli; hlt");
+        table = (page_table_t *)malloc(0x1000, 0x1000);
+        // log((unsigned long)table); 
+        init_page_table(table, READ_WRITE);
+
+        (*directory)[index.dir] = (unsigned long)remove_offset(table) | flags;
+
     }
 
     (*table)[index.table] = adress | flags; // present flags overwriten!!
