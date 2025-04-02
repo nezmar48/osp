@@ -72,7 +72,6 @@ int strlen(const char *s) {
     return len;
 };
 
-unsigned char display_log[] = "";
 
 
 
@@ -93,9 +92,9 @@ void keyboard_handler() {
     }
     
     //translates character to ascii, ads to array and writes it in the console
-    unsigned char character = keyboard_scan_code_to_ascii(scancode);
-    addChar(display_log, character);
-    fb_write(display_log,strlen((char*)display_log),RED,BLACK);
+    unsigned char character[] = "";
+    character[0]= keyboard_scan_code_to_ascii(scancode);
+    fb_write(character,2,RED,BLACK);
 
     // Ensure IRQ1 is unmasked (enable keyboard interrupt)
     unsigned char mask = inb(0x21); // Read current IRQ mask
