@@ -1,6 +1,6 @@
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
     	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c -ffreestanding \
-		 -mno-sse -mno-sse2 -mno-mmx -mno-avx -mno-red-zone -mgeneral-regs-only -Wno-unknown-pragmas
+		 -mno-sse -mno-sse2 -mno-mmx -mno-avx -mno-red-zone -mgeneral-regs-only -Wno-unknown-pragmas -fno-exceptions
 
 # add cpp and assembly files here (no suffix)  
 
@@ -10,7 +10,7 @@ OBJECTS = 	loader kmain \
 		  	output/io output/frame_buffer output/serial_port \
 		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
 		  	paging/paging\
-			stdlib/string stdlib/memcopy stdlib/math stdlib/malloc
+			stdlib/string stdlib/memcopy stdlib/math stdlib/malloc stdlib/frame_buffer stdlib/serial
 
 MODULES = program
 

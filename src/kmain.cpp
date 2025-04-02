@@ -1,5 +1,4 @@
 #include "gdt.h"
-#include "output.h"
 #include "multiboot.h"
 #include "std.h"
 #include "process.h"
@@ -32,14 +31,12 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     init_heap(KERNEL_OFFSET + kernel_size * 0x400000, KERNEL_OFFSET + (kernel_size + 1) * 0x400000);
 
     //frame buffer test
-    char buffer[] = "frame buffer running";
-
-    fb_write(buffer,sizeof(buffer),LIGHT_GREEN,BLACK);
+    frame_buffer fb;
+    fb.write("frame buffer running \n");
      
     //serial test
     
-    char serial_buffer[] = "serial running\0";
-    log(serial_buffer);
+    log("serial running");
 
     //malloc test
     malloc_test();
@@ -48,8 +45,9 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
 
-    fb_write_hex_32(program_mod->mod_start);
-    
+    fb.write(String(program_mod->mod_start));
+    log(program_mod->mod_start);
+
     process program(program_mod);
 
     unsigned long test_args[] = {2, 3};
@@ -59,8 +57,7 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     unsigned long result = program.call();  
 
-    char proces_result_message[] = "function operands sucess:";
-    log(proces_result_message);
+    log("function operands sucess:");
     log((test_args[0] + test_args[1]) == result);
 
     return 0xcafebabe;
