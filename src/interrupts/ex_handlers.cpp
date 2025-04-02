@@ -4,20 +4,38 @@
 #include "../interrupts.h"
 #include "../process.h"
 #include "../paging.h"
+#include "../io.h"
 
 
 void pass_no_error_stub(default_interrupt_frame frame) { 
-    (void)frame;
     char message[] = "no err int recieved";
     log(message);
+    log(frame.code);
 }
 
 void pass_error_stub(error_interrupt_frame frame) {
     char message[] = "int recieved:";
     log(message);
+    log(frame.code);
     log(frame.error);
 }
 
+void PIC_stub(default_interrupt_frame frame) {
+    if (frame.code != 0x20 && frame.code != 0x21) {
+        log("PIC interrupt recieved: ");
+        log(frame.code);
+    }
+    switch (frame.code) {
+        case 0x21:
+            keyboard_handler();
+            break;
+        default:
+            break;
+    } 
+    if (frame.code > PIC1_END_INTERRUPT)
+        outb(PIC2_PORT_A, PIC_ACK);
+    outb(PIC1_PORT_A, PIC_ACK);
+}
 void page_fault(error_interrupt_frame frame) {
     char msg[] = "page fault";
     log(msg);

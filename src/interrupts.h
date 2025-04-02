@@ -19,6 +19,7 @@ void idt_set_descriptor(unsigned char vector, void* isr, unsigned char flags);
 unsigned long idt_init(void);
 
 typedef struct {
+    unsigned long code;
     unsigned long edi;
     unsigned long esi;
     unsigned long ebp;
@@ -33,6 +34,7 @@ typedef struct {
 }default_interrupt_frame;
 
 typedef struct {
+    unsigned long code;
     unsigned long edi;
     unsigned long esi;
     unsigned long ebp;
@@ -46,10 +48,17 @@ typedef struct {
     unsigned long cs;
     unsigned long flags;
 }error_interrupt_frame;
+
+#define PIC1_START_INTERRUPT 0x20
+#define PIC2_START_INTERRUPT 0x28
+#define PIC1_END_INTERRUPT   PIC1_START_INTERRUPT + 7
+#define PIC2_END_INTERRUPT   PIC2_START_INTERRUPT + 7
+
 extern "C" void* isr_stub_table[];
 
 extern "C" void pass_no_error_stub(default_interrupt_frame frame);
 extern "C" void pass_error_stub(error_interrupt_frame frame);
+extern "C" void PIC_stub(default_interrupt_frame frame); 
 extern "C" void page_fault(error_interrupt_frame frame);
 extern "C" void test_interrupt(default_interrupt_frame frame);
 extern "C" void system_call(default_interrupt_frame frame, unsigned long result);

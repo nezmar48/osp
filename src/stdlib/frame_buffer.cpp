@@ -1,4 +1,4 @@
-#include "../output.h"
+#include "../io.h"
 #include "../std.h"
 
 static short fb_pos = 0; // Track fb position persistently
@@ -22,10 +22,10 @@ void frame_buffer::write(const unsigned long num, unsigned char fg, unsigned cha
 
 void frame_buffer::line_up(unsigned char num) {
     for (int i = 0; i < SCREEN_WIDTH * 2 * (SCREEN_ROWS - num); i ++) {
-        fb[i] = fb[SCREEN_WIDTH * 2 * num + i];
+        fb_physical[i] = fb_physical[SCREEN_WIDTH * 2 * num + i];
     }
     for (int i = 0; i < SCREEN_WIDTH * 2 *  num; i ++) {
-        fb[SCREEN_WIDTH * 2 * (SCREEN_ROWS - num) + i] = 0;
+        fb_physical[SCREEN_WIDTH * 2 * (SCREEN_ROWS - num) + i] = 0;
     }
     fb_pos -= SCREEN_WIDTH * 2 * num; 
     if (fb_pos < 0)

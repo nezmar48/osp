@@ -33,7 +33,7 @@
 
 #define SCREEN_WIDTH 80
 #define SCREEN_ROWS  25
-extern char *fb;
+extern char *fb_physical;
 
 void fb_move_cursor(unsigned short pos);
 void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
@@ -168,3 +168,16 @@ void serial_configure(unsigned short com, unsigned short baudRate);
 extern int configured_com;
 
 #endif /* INCLUDE_IO_H */
+
+#ifndef KEYBOARD
+#define KEYBOARD
+
+#define PIC1_PORT_A 0x20
+#define PIC2_PORT_A 0xA0
+
+#define PIC_ACK     0x20
+#define KBD_DATA_PORT   0x60
+void keyboard_init();
+void keyboard_handler();
+#endif // !KEYBOARD
+#define KEYBOARD

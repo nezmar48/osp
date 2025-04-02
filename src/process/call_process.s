@@ -31,6 +31,7 @@ call_process:
 
 global return_process
 return_process:
+    sti 
     mov dword eax, [esp + 4]
     mov dword ebx, [return_registers]
     mov dword ebp, [return_registers + 4]
