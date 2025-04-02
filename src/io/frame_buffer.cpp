@@ -1,7 +1,7 @@
-#include "../output.h"	
+#include "../io.h"	
 #include "../paging.h"
 
-char *fb = (char *)(0x000B8000 + KERNEL_OFFSET) ;
+char *fb_physical = (char *)(0x000B8000 + KERNEL_OFFSET) ;
 
 void fb_move_cursor(unsigned short pos) {
 	outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
@@ -11,8 +11,8 @@ void fb_move_cursor(unsigned short pos) {
 }
 
 void fb_write_cell(unsigned int i, char c, unsigned char bg, unsigned char fg) {
-	fb[i] = c;
-	fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
+	fb_physical[i] = c;
+	fb_physical[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
 
 unsigned int last_position = 0;

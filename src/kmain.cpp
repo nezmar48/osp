@@ -1,4 +1,5 @@
 #include "gdt.h"
+#include "io.h"
 #include "multiboot.h"
 #include "std.h"
 #include "process.h"
@@ -18,10 +19,11 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     );
 
     unsigned long idt = idt_init();
+    // asm volatile ("hlt");
     asm volatile (
         "lidt (%0);"
         "sti;"
-        "int $33;"
+        "int $0x31;"
         :
         : "r" (idt)
         : "memory"
@@ -41,6 +43,8 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     //malloc test
     malloc_test();
 
+    keyboard_init();
+
     //call program
 
     multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
@@ -59,7 +63,8 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     log("function operands sucess:");
     log((test_args[0] + test_args[1]) == result);
-
+   
+    while (true);
     return 0xcafebabe;
 }
 
