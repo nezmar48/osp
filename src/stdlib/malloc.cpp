@@ -109,12 +109,14 @@ void free(void * address) {
     free_chunks(first_chunk);
 }
 
+bool malloc_configured = false;
 void init_heap(unsigned long heap_start_add, unsigned long heap_end_add) {
     heap_start = heap_start_add + 0x1000 - heap_start_add%0x1000;
     heap_end = heap_end_add - CHUNK_SIZE - heap_end_add%CHUNK_SIZE;
     unsigned long chunks_space = (heap_end_add - heap_start_add ) / CHUNK_SIZE;
     chunks_space > N_CHUNKS ? actual_N_chunks = N_CHUNKS : actual_N_chunks = chunks_space;
     init_heap_map();
+    malloc_configured = true;
 }
 
 void malloc_test() {

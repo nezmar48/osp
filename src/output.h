@@ -1,3 +1,4 @@
+#include "paging.h"
 #ifndef INCLUDE_FRAMEBUFFER_H
 #define INCLUDE_FRAMEBUFFER_H
 
@@ -29,31 +30,13 @@
 #define YELLOW       0xE
 #define WHITE        0xF
 
-/** fb_move_cursor:
- *  Moves the cursor of the framebuffer to the given position
- *
- *  @param pos The new position of the cursor
- */
+
+#define SCREEN_WIDTH 80
+#define SCREEN_ROWS  25
+extern char *fb;
+
 void fb_move_cursor(unsigned short pos);
-
-/** fb_write_cell:
- *  Writes a character with the given foreground and background to position i
- *  in the framebuffer.
- *
- *  @param i  The location in the framebuffer
- *  @param c  The character
- *  @param fg The foreground color
- *  @param bg The background color
- */
 void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
-
-/** write:
- *  writes the contents of the buffer buf of length len to the screen
- *
- *  @param buf  Buffer that has contents to be written to screen
- *  @param len  Length of buffer
- */
-
 void fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg);
 
 #endif /* INCLUDE_IO_H */
