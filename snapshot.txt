@@ -1,0 +1,25 @@
+ACK received!pt!
+
+kernel /boot/kernel.elf
+   [Multiboot-elf, <0x100000:0x16ec:0x0>, <0x102000:0x7bc:0x0>, <0x103000:0x8c:
+0x27838>, shtab=0x12b280, entry=0xc0100030]
+module /modules/program
+   [Multiboot-module @ 0x12d000, 0x14 bytes]
+
+ß
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -54,4 +54,6 @@ extern "C" void page_fault(error_interrupt_frame frame);
 extern "C" void test_interrupt(default_interrupt_frame frame);
 extern "C" void system_call(default_interrupt_frame frame, unsigned long result);
 
+void pic_remap();
+
 #endif // !INTERRUPTS

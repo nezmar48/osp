@@ -19,7 +19,12 @@ void fb_write_cell(unsigned int i, char c, unsigned char bg, unsigned char fg) {
 #define SCREEN_HEIGHT 25
 #define FB_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT * 2)
 
-int fb_write(unsigned char *buf, unsigned int len, unsigned char fg, unsigned char bg){
+void fb_write(unsigned char *buf, unsigned int len, unsigned char fg, unsigned char bg) {
+    fb_write((char*)buf, len, fg, bg);
+}
+
+
+void fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg){
     	   unsigned int i;
     for (i = 0; i < len && i < (SCREEN_WIDTH * SCREEN_HEIGHT); i++) {
         unsigned int row = i / SCREEN_WIDTH;  // Calculate row number
@@ -27,7 +32,7 @@ int fb_write(unsigned char *buf, unsigned int len, unsigned char fg, unsigned ch
         unsigned int pos = (row * SCREEN_WIDTH + col) * 2;  // Position in framebuffer
         fb_write_cell(pos, buf[i], fg, bg);
     }
-    return i;
+    //return i;
 }
 
 void clear_screen() {

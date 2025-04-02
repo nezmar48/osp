@@ -8,7 +8,7 @@ CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 OBJECTS = 	loader kmain \
 			other/gdt other/multiboot \
 			process/process process/call_process\
-		  	output/io output/frame_buffer output/serial_port output/keyboard_input\
+		  	output/io output/frame_buffer output/serial_port output/keyboard\
 		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
 		  	paging/paging\
 			stdlib/string stdlib/memcopy stdlib/math

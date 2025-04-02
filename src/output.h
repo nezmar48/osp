@@ -53,8 +53,9 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
  *  @param buf  Buffer that has contents to be written to screen
  *  @param len  Length of buffer
  */
-
 void fb_write(char *buf, unsigned int len, unsigned char fg, unsigned char bg);
+
+void fb_write(unsigned char *buf, unsigned int len, unsigned char fg, unsigned char bg);
 
 #endif /* INCLUDE_IO_H */
 
@@ -183,5 +184,31 @@ void serial_write_byte(unsigned short com, char byteData);
 void serial_configure(unsigned short com, unsigned short baudRate);
 
 extern int configured_com;
+
+#ifndef INCLUDE_KEYBOARD_H
+#define INCLUDE_KEYBOARD_H
+
+#define KEYBOARD_MAX_ASCII 83 
+
+void keyboard_flush_buffer();
+
+unsigned char keyboard_read_scan_code(void);
+
+unsigned char keyboard_scan_code_to_ascii(unsigned char);
+
+void addChar(unsigned char *s, char c);
+
+int strlen(const char *s);
+
+void clear_screen();
+
+void keyboard_handler();
+
+void keyboard_init();
+
+
+
+#endif /* INCLUDE_KEYBOARD_H */
+
 
 #endif /* INCLUDE_IO_H */

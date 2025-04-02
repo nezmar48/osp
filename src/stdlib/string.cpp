@@ -17,12 +17,12 @@ void fb_write_hex_32(unsigned long hexValue) {
     fb_write(result,sizeof(result),LIGHT_GREEN,BLACK);
 }
 
-void serial_write_hex_32(unsigned long hexValue) {
+/*void serial_write_hex_32(unsigned long hexValue) {
     char result[8];
 
     hex_to_char_array_32(hexValue, result);
     serial_write(SERIAL_COM1_BASE, result, sizeof(result));
-}
+}*/
 
 void log(char * string) {
     if(configured_com != SERIAL_COM1_BASE)
