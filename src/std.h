@@ -31,18 +31,20 @@ public:
     const char* c_str() const;
 };
 
-class frame_buffer {
-public:
-    void write(const String& str, unsigned char fg = 0x0F, unsigned char bg = 0x00);
-    void write(const unsigned long num, unsigned char fg = 0x0F, unsigned char bg = 0x00);
-    void write(const char * char_pt, unsigned char fg = 0x0F, unsigned char bg = 0x00);
-    void line_up(unsigned char num = 1);
-    void clear();
-};
+void write(const String& str, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void write(const unsigned long num, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void write(const char * char_pt, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void write(const char ch, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void line_up(unsigned char num = 1);
+void clear_screen();
 
 void log(const char * char_pt);
-void log(String string);
-void log(unsigned long hex);
+void log(const String& string);
+void log(const unsigned long hex);
 
+char read_key();
+char read_key_loud();
+String read_line();
+String read_line_loud();
 #endif //STD_LIB
 

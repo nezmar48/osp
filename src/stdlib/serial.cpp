@@ -27,11 +27,11 @@ void log(const char * char_pt) {
     serial_write_byte(SERIAL_COM1_BASE, '\n');
 }
 
-void log(String &string) {
+void log(const String &string) {
     log((char*)string.c_str()); 
 }
 
-void log(unsigned long hex) {
+void log(const unsigned long hex) {
     char message[9];
     hex_to_char_array_32(hex, message);
     message[8] = '\0';

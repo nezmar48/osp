@@ -4,13 +4,13 @@ CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 
 # add cpp and assembly files here (no suffix)  
 
-OBJECTS = 	loader kmain \
+OBJECTS = 	loader kmain shell\
 			other/gdt other/multiboot \
 			process/process process/call_process\
 		  	io/io io/frame_buffer io/serial_port io/keyboard \
 		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
 		  	paging/paging\
-			stdlib/string stdlib/memcopy stdlib/math stdlib/malloc stdlib/frame_buffer stdlib/serial
+			stdlib/string stdlib/memcopy stdlib/math stdlib/malloc stdlib/frame_buffer stdlib/serial stdlib/keyboard
 
 MODULES = program
 

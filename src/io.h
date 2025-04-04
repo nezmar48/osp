@@ -176,8 +176,16 @@ extern int configured_com;
 #define PIC2_PORT_A 0xA0
 
 #define PIC_ACK     0x20
+
 #define KBD_DATA_PORT   0x60
+
+const int buffer_size = 256;
+
+extern char buffer[buffer_size];
+extern int buffer_pos;
+extern bool new_key;
 void keyboard_init();
 void keyboard_handler();
+void clear_buffer();
 #endif // !KEYBOARD
 #define KEYBOARD
