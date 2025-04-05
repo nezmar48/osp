@@ -5,7 +5,7 @@ static short fb_pos = 0; // Track fb position persistently
 
 void write(const char * char_pt, unsigned char fg, unsigned char bg) {
     for (unsigned short i = 0; char_pt[i] != '\0'; i++) {
-        if (fb_pos > SCREEN_ROWS * SCREEN_WIDTH * 2 - 1)
+        if (fb_pos > SCREEN_ROWS * SCREEN_WIDTH * 2 - 2)
             line_up();
         if (char_pt[i] == '\n') {
             fb_pos = (((fb_pos/2) / SCREEN_WIDTH + 1) * SCREEN_WIDTH * 2); // Move to next line
@@ -30,7 +30,7 @@ void write(const char ch, unsigned char fg, unsigned char bg) {
 }
 
 void line_up(unsigned char num) {
-    for (int i = 0; i < SCREEN_WIDTH * 2 * (SCREEN_ROWS - num) + 1; i ++) {
+    for (int i = 0; i < SCREEN_WIDTH * 2 * (SCREEN_ROWS - num) + 2; i ++) {
         fb_physical[i] = fb_physical[SCREEN_WIDTH * 2 * num + i];
     }
     for (int i = 0; i < SCREEN_WIDTH * 2 *  num; i ++) {
@@ -39,6 +39,7 @@ void line_up(unsigned char num) {
     fb_pos -= SCREEN_WIDTH * 2 * num; 
     if (fb_pos < 0)
         fb_pos = 0;
+    log(fb_pos);
     fb_move_cursor(fb_pos / 2);
 }
 

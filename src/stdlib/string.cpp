@@ -1,7 +1,11 @@
 #include "../std.h"
 
 // Default constructor
-String::String() : data(nullptr), length(0) {}
+String::String() {
+    data = (char*) malloc(1);
+    data[0] = 0;
+    length = 0;
+}
 
 // Constructor from C-string
 String::String(const char* str) {
@@ -81,4 +85,27 @@ unsigned short String::size() const {
 // Get the C-string representation
 const char* String::c_str() const {
     return data;
+}
+
+// Equality operator
+bool String::operator==(const String& other) const {
+    log("test");
+    log((unsigned long)data);
+    log((unsigned long)other.data);
+    if (length != other.length) {
+        return false;
+    }
+    for (unsigned short i = 0; i < length; i++) {
+        log(this->data[i]);
+        log(other.data[i]);
+        if (data[i] != other.data[i]) {
+            log("not same");
+            return false;
+        }
+    }
+    return true;
+}
+
+bool String::operator!=(const String& other) const {
+    return !(*this == other);
 }

@@ -1,5 +1,4 @@
 #include "../io.h"
-#include "../std.h"
 
 char alphabeth[257] =
 {

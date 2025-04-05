@@ -14,10 +14,10 @@ void malloc_test();
 
 class String {
 private:
-    char* data;
     unsigned short length;
 
 public:
+    char* data;
     String();
     String(const char* str);
     String(const String& other);
@@ -26,7 +26,8 @@ public:
 
     String& operator=(const String& other);
     String operator+(const String& other) const;
-
+    bool operator==(const String& other) const;
+    bool operator!=(const String& other) const;
     unsigned short size() const;
     const char* c_str() const;
 };
