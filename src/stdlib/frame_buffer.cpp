@@ -30,16 +30,16 @@ void write(const char ch, unsigned char fg, unsigned char bg) {
 }
 
 void line_up(unsigned char num) {
-    for (int i = 0; i < SCREEN_WIDTH * 2 * (SCREEN_ROWS - num) + 2; i ++) {
+    for (int i = 0; i < SCREEN_WIDTH * 2 * (SCREEN_ROWS - num); i ++) {
         fb_physical[i] = fb_physical[SCREEN_WIDTH * 2 * num + i];
     }
-    for (int i = 0; i < SCREEN_WIDTH * 2 *  num; i ++) {
-        fb_physical[SCREEN_WIDTH * 2 * (SCREEN_ROWS - num) + i] = 0;
+    for (int i = 0; i < SCREEN_WIDTH * num; i ++) {
+        fb_physical[(SCREEN_WIDTH * (SCREEN_ROWS - num) + i ) * 2] = ' ';
+        fb_physical[(SCREEN_WIDTH * (SCREEN_ROWS - num) + i ) * 2+ 1] = 0xF;
     }
     fb_pos -= SCREEN_WIDTH * 2 * num; 
     if (fb_pos < 0)
         fb_pos = 0;
-    log(fb_pos);
     fb_move_cursor(fb_pos / 2);
 }
 

@@ -89,9 +89,6 @@ const char* String::c_str() const {
 
 // Equality operator
 bool String::operator==(const String& other) const {
-    log("test");
-    log((unsigned long)data);
-    log((unsigned long)other.data);
     if (length != other.length) {
         return false;
     }
