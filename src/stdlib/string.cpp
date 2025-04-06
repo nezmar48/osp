@@ -106,3 +106,66 @@ bool String::operator==(const String& other) const {
 bool String::operator!=(const String& other) const {
     return !(*this == other);
 }
+
+
+// Split function
+String* String::split(unsigned short& count) const {
+    count = 0;
+
+    // First, count how many substrings there will be
+    bool inToken = false;
+    for (unsigned short i = 0; i < length; i++) {
+        if (data[i] != ' ') {
+            if (!inToken) {
+                count++;
+                inToken = true;
+            }
+        } else {
+            inToken = false;
+        }
+    }
+
+    String* result = new String[count];
+    unsigned short idx = 0;
+    unsigned short start = 0;
+    bool collecting = false;
+
+    for (unsigned short i = 0; i <= length; i++) {
+        if (i < length && data[i] != ' ') {
+            if (!collecting) {
+                start = i;
+                collecting = true;
+            }
+        } else {
+            if (collecting) {
+                unsigned short tokenLen = i - start;
+                char* token = (char*)malloc(tokenLen + 1);
+                for (unsigned short j = 0; j < tokenLen; j++) {
+                    token[j] = data[start + j];
+                }
+                token[tokenLen] = '\0';
+                result[idx++] = String(token);
+                free(token);
+                collecting = false;
+            }
+        }
+    }
+
+    return result;
+}
+
+unsigned long String::to_number() const {
+    unsigned long result = 0;
+    bool isValid = true;
+
+    for (unsigned short i = 0; i < length; i++) {
+        if (data[i] >= '0' && data[i] <= '9') {
+            result = result * 10 + (data[i] - '0');
+        } else {
+            isValid = false;
+            log("converting an invalid string to number result = 0\0");
+            break;
+        }
+    }
+    return isValid ? result : 0;
+}

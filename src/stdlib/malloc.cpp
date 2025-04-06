@@ -135,3 +135,19 @@ void malloc_test() {
     free(test_var3);
     free(test_var4);
 }
+
+void* operator new[](unsigned int size) {
+    return malloc(size);
+}
+
+void operator delete[](void* ptr) noexcept {
+    free(ptr);
+}
+
+void* operator new(unsigned int size) {
+    return malloc(size);
+}
+
+void operator delete(void* ptr) noexcept {
+    free(ptr);
+}

@@ -33,6 +33,7 @@ String read_line_loud() {
         ch = read_key_loud();
         buffer2[++buffer2_pos] = ch;
     } while (ch != '\n');
+    buffer2[buffer2_pos] = 0;
     return  String(buffer2);
 }
 

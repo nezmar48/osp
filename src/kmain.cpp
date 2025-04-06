@@ -5,6 +5,7 @@
 #include "process.h"
 #include "interrupts.h"
 #include "paging.h"
+#include "shell.h"
 
 void shell_main();
 
@@ -64,6 +65,11 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     log("function operands sucess:");
     log((test_args[0] + test_args[1]) == result);
+
+    Dictionary<command> * commands_pt = init_shell();
+
+    process add(program_mod);
+    commands_pt->add("ADD", {false, 0, add});
 
     shell_main();
    
