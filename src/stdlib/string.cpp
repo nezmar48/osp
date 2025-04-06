@@ -93,10 +93,7 @@ bool String::operator==(const String& other) const {
         return false;
     }
     for (unsigned short i = 0; i < length; i++) {
-        log(this->data[i]);
-        log(other.data[i]);
         if (data[i] != other.data[i]) {
-            log("not same");
             return false;
         }
     }

@@ -11,7 +11,7 @@ OBJECTS = 	loader kmain \
 		  	interrupts/ex_handlers interrupts/idt interrupts/interrupts \
 		  	paging/paging\
 			stdlib/string stdlib/memcopy stdlib/math stdlib/malloc stdlib/frame_buffer stdlib/serial stdlib/keyboard stdlib/dictionary \
-			shell/main
+			shell/shell_main
 
 MODULES = program
 

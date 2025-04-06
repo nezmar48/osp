@@ -3,14 +3,14 @@
 
 Dictionary<command> * commands_pt;
 
-void populate_commands() {
-    command c = {true, quit,  nullptr};
-    commands_pt->add("QUIT\0", c);
-}
-
-Dictionary<command>* init_shell() {
+Dictionary<command>* init_shell(multiboot_info_t * multiboot_info) {
     commands_pt = new Dictionary<command>(); 
-    populate_commands();
+
+    multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
+    process* add = new process(program_mod);
+    commands_pt->add("ADD\0", command(add));
+
+    commands_pt->add("QUIT\0", command(quit));
     return commands_pt;
 }
 
@@ -25,18 +25,18 @@ void shell_main() {
         split_str = read_line_loud().split(count);
         command* cmd = commands_pt->find(split_str[0]);
         if (cmd == nullptr) {
-            write("invalid command\n\0", RED);
+            invalid_command();
             continue;
         }
         if (cmd->is_func)
             cmd->func(&split_str[1], count - 1);
         else {
-            cmd->proc.args.size = count - 1; 
-            cmd->proc.args.args = (unsigned long *)malloc(sizeof(unsigned long) * (count - 1));
+            cmd->proc->args.size = count - 1; 
+            cmd->proc->args.args = (unsigned long *)malloc(sizeof(unsigned long) * (count - 1));
             for(int i = 0; i < count - 1; i ++) {
-                cmd->proc.args.args[i] = split_str[i + 1].to_number();
+                cmd->proc->args.args[i] = split_str[i + 1].to_number();
             } 
-            unsigned long result = cmd->proc.call();
+            unsigned long result = cmd->proc->call();
             write("Process resut: ");
             write(result);
             write('\n');
@@ -53,4 +53,10 @@ void quit(String* args, int count) {
     }
     shell_main_loop = false;
     write("Quit called \n\0");
+}
+
+void invalid_command(String* args, int count) {
+    (void)args;
+    (void)count;
+    write("invalid_command\n\0", RED);
 }

@@ -51,25 +51,10 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
 
-    write(String(program_mod->mod_start));
-    log(program_mod->mod_start);
-
-    process program(program_mod);
-
-    unsigned long test_args[] = {2, 3};
-
-    program.args.args = test_args;
-    program.args.size = 2;
-
-    unsigned long result = program.call();  
-
-    log("function operands sucess:");
-    log((test_args[0] + test_args[1]) == result);
-
-    Dictionary<command> * commands_pt = init_shell();
+    Dictionary<command> * commands_pt = init_shell(multiboot_info);
 
     process add(program_mod);
-    commands_pt->add("ADD", {false, 0, add});
+    commands_pt->add("ADD\0", command(add));
 
     shell_main();
    
