@@ -1,16 +1,5 @@
 #include "../io.h"
-#include "../std.h"
 
-void keyboard_init() {
-    // Unmask keyboard interrupt (IRQ1) in PIC
-    outb(0x21, inb(0x21) & ~0x02);
-
-    // Reset and enable the keyboard
-    outb(0x64, 0xAD);  // Disable keyboard
-    outb(0x64, 0xAE);  // Enable keyboard interface
-    outb(0x60, 0xF4);  // Enable keyboard scannin
-    
-}
 char alphabeth[257] =
 {
     '\0', '\x1B', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',  // 00-0E
@@ -30,12 +19,38 @@ char translate_from_scan_code(char code) {
     return alphabeth[(int)code];
 }
 
-frame_buffer fb;
+char buffer[buffer_size];
+int buffer_pos = -1;
+
+void append_buffer(char ch) {
+    buffer[++buffer_pos] = ch;
+}
+
+void clear_buffer() {
+    for (int i = 0; i < buffer_size; i++)
+        buffer[i] = 0;
+    buffer_pos = -1;
+}
+
+bool new_key = false;
 void keyboard_handler() {
     unsigned char code = inb(KBD_DATA_PORT);
-    char ascii[2];
-    ascii[1] = 0;
-    ascii[0] = translate_from_scan_code(code);
-    if (ascii[0] != 0)
-        fb.write(ascii);
+    char ascii= translate_from_scan_code(code);
+    if (ascii != 0) {
+        append_buffer(ascii);
+        new_key = true;
+    }
+}
+
+void keyboard_init() {
+    clear_buffer();
+
+    // Unmask keyboard interrupt (IRQ1) in PIC
+    outb(0x21, inb(0x21) & ~0x02);
+
+    // Reset and enable the keyboard
+    outb(0x64, 0xAD);  // Disable keyboard
+    outb(0x64, 0xAE);  // Enable keyboard interface
+    outb(0x60, 0xF4);  // Enable keyboard scannin
+    
 }

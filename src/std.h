@@ -14,10 +14,10 @@ void malloc_test();
 
 class String {
 private:
-    char* data;
     unsigned short length;
 
 public:
+    char* data;
     String();
     String(const char* str);
     String(const String& other);
@@ -26,23 +26,71 @@ public:
 
     String& operator=(const String& other);
     String operator+(const String& other) const;
-
+    bool operator==(const String& other) const;
+    bool operator!=(const String& other) const;
     unsigned short size() const;
     const char* c_str() const;
+    String* split(unsigned short& count) const;
+    unsigned long to_number() const;
 };
 
-class frame_buffer {
-public:
-    void write(const String& str, unsigned char fg = 0x0F, unsigned char bg = 0x00);
-    void write(const unsigned long num, unsigned char fg = 0x0F, unsigned char bg = 0x00);
-    void write(const char * char_pt, unsigned char fg = 0x0F, unsigned char bg = 0x00);
-    void line_up(unsigned char num = 1);
-    void clear();
-};
+/* Frame buffer supported color value */
+#define BLACK        0x0
+#define BLUE         0x1
+#define GREEN        0x2
+#define CYAN         0x3
+#define RED          0x4
+#define MAGENTA      0x5
+#define BROWN        0x6
+#define LIGHT_GREY   0x7
+#define DARK_GREY    0x8
+#define LIGHT_BLUE   0x9
+#define LIGHT_GREEN  0xA
+#define LIGHT_CYAN   0xB
+#define LIGHT_RED    0xC
+#define LIGHT_MAGENTA 0xD
+#define YELLOW       0xE
+#define WHITE        0xF
+
+void write(const String& str, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void write(const unsigned long num, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void write(const char * char_pt, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void write(const char ch, unsigned char fg = 0x0F, unsigned char bg = 0x00);
+void line_up(unsigned char num = 1);
+void clear_screen();
 
 void log(const char * char_pt);
-void log(String string);
-void log(unsigned long hex);
+void log(const String& string);
+void log(const unsigned long hex);
+
+char read_key();
+char read_key_loud();
+String read_line();
+String read_line_loud();
+
+// Generic Entry structure
+template <typename T>
+struct Entry {
+    String key;
+    T value;
+};
+
+template <typename T>
+class Dictionary {
+protected:
+    Entry<T>* data;
+    int capacity;
+    int size;
+
+    void resize();
+
+public:
+    Dictionary();
+    virtual ~Dictionary();
+
+    void add(const String& key, const T& value);
+
+    T* find(const String& key);
+};
 
 #endif //STD_LIB
-

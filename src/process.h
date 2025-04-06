@@ -8,9 +8,9 @@ extern "C" unsigned long call_process(page_directory_t * page_directory, unsigne
 extern "C" unsigned long return_process(unsigned long result);
 class process {
     public: 
-
         process(multiboot_module_t *module);
         unsigned long address;
+        ~process();
 
         struct {
             int size = 0;

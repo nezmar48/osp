@@ -5,6 +5,9 @@
 #include "process.h"
 #include "interrupts.h"
 #include "paging.h"
+#include "shell.h"
+
+void shell_main();
 
 extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
@@ -33,8 +36,7 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
     init_heap(KERNEL_OFFSET + kernel_size * 0x400000, KERNEL_OFFSET + (kernel_size + 1) * 0x400000);
 
     //frame buffer test
-    frame_buffer fb;
-    fb.write("frame buffer running \n");
+    write("frame buffer running \n");
      
     //serial test
     
@@ -49,22 +51,13 @@ extern "C" int kmain(multiboot_info_t * multiboot_info) {
 
     multiboot_module_t * program_mod = add_offset((multiboot_module_t *)multiboot_info->mods_addr);
 
-    fb.write(String(program_mod->mod_start));
-    log(program_mod->mod_start);
+    Dictionary<command> * commands_pt = init_shell(multiboot_info);
 
-    process program(program_mod);
+    process add(program_mod);
+    commands_pt->add("ADD\0", command(add));
 
-    unsigned long test_args[] = {2, 3};
-
-    program.args.args = test_args;
-    program.args.size = 2;
-
-    unsigned long result = program.call();  
-
-    log("function operands sucess:");
-    log((test_args[0] + test_args[1]) == result);
+    shell_main();
    
-    while (true);
     return 0xcafebabe;
 }
 

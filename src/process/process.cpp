@@ -24,6 +24,12 @@ process::process(multiboot_module_t *module) {
     (*this->page_dir)[get_index(KERNEL_OFFSET - 0x1000).dir] |= (unsigned long)remove_offset(this->page_table_stack) | PRESENT;
 }
 
+process::~process() {
+    free(page_dir);
+    free(page_table_main);
+    free(page_table_stack);
+}
+
 unsigned long process::call(void) {
 
     load();

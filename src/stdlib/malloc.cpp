@@ -92,7 +92,7 @@ void mark_chunks_used(int first_chunk, int num, bool alligned) {
 }
 
 void * malloc(int size, int allign) {
-    int chunk_size = (size - 1) / CHUNK_SIZE;
+    int chunk_size = (size - 1) / CHUNK_SIZE + 1;
     int chunk_allign = (allign - 1) / CHUNK_SIZE + 1;
     int first_chunk = find_free_chunks(chunk_size, chunk_allign);
     mark_chunks_used(first_chunk, chunk_size, chunk_allign != 1);
@@ -134,4 +134,20 @@ void malloc_test() {
     free(test_var2);
     free(test_var3);
     free(test_var4);
+}
+
+void* operator new[](unsigned int size) {
+    return malloc(size);
+}
+
+void operator delete[](void* ptr) noexcept {
+    free(ptr);
+}
+
+void* operator new(unsigned int size) {
+    return malloc(size);
+}
+
+void operator delete(void* ptr) noexcept {
+    free(ptr);
 }
