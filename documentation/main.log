@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.3.28)  7 APR 2025 11:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Arch Linux) (preloaded format=pdflatex 2025.3.18)  7 APR 2025 14:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -95,7 +95,15 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 [2]
 
-[3] (./main.aux)
+[3]
+
+[4]
+
+[5]
+
+[6]
+
+[7] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -103,17 +111,17 @@ L3 programming layer <2025-01-18>
  ) 
 Here is how much of TeX's memory you used:
  1295 strings out of 475137
- 20751 string characters out of 5765918
- 410478 words of memory out of 5000000
+ 20743 string characters out of 5765926
+ 411480 words of memory out of 5000000
  24334 multiletter control sequences out of 15000+600000
  562784 words of font info for 49 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
- 57i,7n,65p,511b,206s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,7n,65p,806b,206s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on main.pdf (3 pages, 66198 bytes).
+Output written on main.pdf (7 pages, 76951 bytes).
 PDF statistics:
- 34 PDF objects out of 1000 (max. 8388607)
- 20 compressed objects within 1 object stream
+ 48 PDF objects out of 1000 (max. 8388607)
+ 30 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
